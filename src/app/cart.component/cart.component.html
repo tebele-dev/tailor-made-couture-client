@@ -1,0 +1,22 @@
+<div class="min-h-screen bg-background">
+  
+    <div class="container mx-auto px-4 py-12">
+      <div class="max-w-4xl mx-auto">
+        <h1 class="page-title animate-fade-in-up">Shopping Cart</h1>
+  
+        <!-- Empty cart state -->
+        <div class="card animate-fade-in">
+          <div class="card-content empty-cart">
+            <lucide-icon [name]="shoppingBagIcon" class="empty-cart-icon"></lucide-icon>
+            <h2 class="empty-cart-title">Your cart is empty</h2>
+            <p class="empty-cart-description">
+              Start shopping to add items to your cart
+            </p>
+            <a [routerLink]="['/products']" class="btn-primary">
+              Continue Shopping
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

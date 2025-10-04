@@ -1,0 +1,89 @@
+<nav class="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <a [routerLink]="['/']" class="flex items-center gap-2 group">
+          <lucide-icon [name]="scissorsIcon" class="h-6 w-6 text-accent transition-transform group-hover:rotate-12"></lucide-icon>
+          <span class="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            TailorMade Couture
+          </span>
+        </a>
+  
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center gap-8">
+          <a [routerLink]="['/']" class="text-foreground hover:text-accent transition-colors">
+            Home
+          </a>
+          <a [routerLink]="['/products']" class="text-foreground hover:text-accent transition-colors">
+            Shop
+          </a>
+          <a [routerLink]="['/custom-design']" class="text-foreground hover:text-accent transition-colors">
+            Custom Design
+          </a>
+          <a [routerLink]="['/about']" class="text-foreground hover:text-accent transition-colors">
+            About
+          </a>
+        </div>
+  
+        <!-- Cart & Mobile Menu -->
+        <div class="flex items-center gap-4">
+          <a [routerLink]="['/cart']">
+            <button type="button" class="relative p-2 text-foreground hover:text-accent transition-colors">
+              <lucide-icon [name]="shoppingCartIcon" class="h-5 w-5"></lucide-icon>
+              <span class="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-accent text-accent-foreground text-xs flex items-center justify-center">
+                0
+              </span>
+            </button>
+          </a>
+  
+          <!-- Mobile Menu Button -->
+          <button
+            type="button"
+            (click)="toggleMobileMenu()"
+            class="md:hidden"
+          >
+            <lucide-icon 
+              [name]="mobileMenuIcon" 
+              class="h-6 w-6"
+            ></lucide-icon>
+          </button>
+        </div>
+      </div>
+  
+      <!-- Mobile Menu -->
+      @if (mobileMenuOpen) {
+        <div class="md:hidden py-4 border-t border-border animate-fade-in">
+          <div class="flex flex-col gap-4">
+            <a
+              [routerLink]="['/']"
+              class="text-foreground hover:text-accent transition-colors"
+              (click)="closeMobileMenu()"
+            >
+              Home
+            </a>
+            <a
+              [routerLink]="['/products']"
+              class="text-foreground hover:text-accent transition-colors"
+              (click)="closeMobileMenu()"
+            >
+              Shop
+            </a>
+            <a
+              [routerLink]="['/custom-design']"
+              class="text-foreground hover:text-accent transition-colors"
+              (click)="closeMobileMenu()"
+            >
+              Custom Design
+            </a>
+            <a
+              [routerLink]="['/about']"
+              class="text-foreground hover:text-accent transition-colors"
+              (click)="closeMobileMenu()"
+            >
+              About
+            </a>
+          </div>
+        </div>
+      }
+    </div>
+  </nav>

@@ -1,0 +1,36 @@
+.not-found-container {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-color: hsl(var(--secondary));
+  }
+  
+  .not-found-content {
+    text-align: center;
+  }
+  
+  .error-code {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: hsl(var(--foreground));
+  }
+  
+  .error-message {
+    font-size: 1.5rem;
+    color: hsl(var(--muted-foreground));
+    margin-bottom: 2rem;
+  }
+  
+  .home-link {
+    color: hsl(var(--accent));
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+  
+  .home-link:hover {
+    color: hsl(var(--accent) / 0.8);
+    text-decoration: underline;
+  }

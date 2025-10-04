@@ -1,0 +1,25 @@
+<section class="featured-products">
+    <div class="container">
+      <div class="section-header animate-fade-in-up">
+        <h2 class="section-title">Featured Collection</h2>
+        <p class="section-description">
+          Explore our curated selection of premium garments
+        </p>
+      </div>
+      
+      <div class="products-grid">
+        @for (product of featuredProducts; track product.id; let index = $index) {
+          <div class="product-item" [style.animation-delay]="index * 0.1 + 's'">
+            <app-product-card [product]="product"></app-product-card>
+          </div>
+        }
+      </div>
+      
+      <div class="section-footer">
+        <a [routerLink]="['/products']" class="btn-outline">
+          View All Products
+          <lucide-icon [name]="arrowRightIcon" class="btn-icon"></lucide-icon>
+        </a>
+      </div>
+    </div>
+  </section>

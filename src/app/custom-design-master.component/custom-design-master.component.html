@@ -1,0 +1,167 @@
+<div class="min-h-screen bg-background">
+    <div class="container mx-auto px-4 py-12">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12 animate-fade-in-up">
+          <h1 class="page-title">Custom Design Studio</h1>
+          <p class="page-description">
+            Create your perfect garment in four simple steps
+          </p>
+        </div>
+  
+        <!-- Progress Steps -->
+        <div class="progress-steps mb-12">
+          <div class="steps-container">
+            @for (stepItem of steps; track stepItem.num) {
+              <div class="step-item">
+                <div class="step-icon" [class.active]="step >= stepItem.num">
+                  <lucide-icon [name]="stepItem.icon" class="icon"></lucide-icon>
+                </div>
+                <span class="step-label">{{ stepItem.label }}</span>
+              </div>
+            }
+          </div>
+        </div>
+  
+        <!-- Step 1: Choose Garment Type -->
+        @if (step === 1) {
+          <div class="animate-fade-in">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Choose Your Garment</h2>
+                <p class="card-description">
+                  Select the type of garment you'd like to customize
+                </p>
+              </div>
+              <div class="card-content">
+                <div class="garment-grid">
+                  @for (option of garmentOptions; track option.value) {
+                    <div 
+                      class="garment-option" 
+                      [class.selected]="garmentType === option.value"
+                      (click)="selectGarmentType(option.value)"
+                    >
+                      <div class="option-content">
+                        <div class="option-header">
+                          <input 
+                            type="radio" 
+                            [id]="option.value" 
+                            [value]="option.value" 
+                            [(ngModel)]="garmentType"
+                            class="radio-input"
+                          >
+                          <label [for]="option.value" class="option-label">
+                            {{ option.label }}
+                          </label>
+                        </div>
+                        <p class="option-price">{{ option.price }}</p>
+                      </div>
+                    </div>
+                  }
+                </div>
+  
+                <div class="step-actions">
+                  <button
+                    type="button"
+                    class="btn-primary"
+                    [disabled]="!garmentType"
+                    (click)="nextStep()"
+                  >
+                    Continue to Measurements
+                    <lucide-icon [name]="arrowRightIcon" class="btn-icon"></lucide-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+  
+        <!-- Step 2: Measurements -->
+        @if (step === 2) {
+          <div class="animate-fade-in">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Enter Your Measurements</h2>
+                <p class="card-description">
+                  Provide your measurements or upload a reference photo
+                </p>
+              </div>
+              <div class="card-content">
+                <div class="tabs-container">
+                  <div class="tabs-list">
+                    <button 
+                      class="tab-trigger" 
+                      [class.active]="activeTab === 'manual'"
+                      (click)="setActiveTab('manual')"
+                    >
+                      Manual Entry
+                    </button>
+                    <button 
+                      class="tab-trigger" 
+                      [class.active]="activeTab === 'profile'"
+                      (click)="setActiveTab('profile')"
+                    >
+                      Saved Profile
+                    </button>
+                  </div>
+                  
+                  @if (activeTab === 'manual') {
+                    <div class="tab-content">
+                      <div class="measurements-grid">
+                        @for (measurement of measurements; track measurement) {
+                          <div class="measurement-field">
+                            <label class="field-label">{{ measurement }}</label>
+                            <div class="field-input-group">
+                              <input
+                                type="number"
+                                placeholder="0"
+                                class="number-input"
+                              />
+                              <span class="input-suffix">inches</span>
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+                  
+                  @if (activeTab === 'profile') {
+                    <div class="tab-content">
+                      <p class="empty-profile-message">
+                        No saved measurement profiles yet. Complete your first order to save your measurements.
+                      </p>
+                    </div>
+                  }
+                </div>
+  
+                <div class="step-actions between">
+                  <button type="button" class="btn-outline" (click)="prevStep()">
+                    Back
+                  </button>
+                  <button
+                    type="button"
+                    class="btn-primary"
+                    (click)="nextStep()"
+                  >
+                    Continue to Fabric Selection
+                    <lucide-icon [name]="arrowRightIcon" class="btn-icon"></lucide-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+  
+        <!-- Placeholder for steps 3 and 4 -->
+        @if (step > 2) {
+          <div class="placeholder-step animate-fade-in">
+            <p class="placeholder-text">
+              Steps 3 and 4 (Fabric Selection & Review) coming soon!
+            </p>
+            <button type="button" class="btn-outline" (click)="step = 1">
+              Start Over
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  </div>

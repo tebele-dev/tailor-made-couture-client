@@ -1,0 +1,23 @@
+<section class="custom-design-cta">
+    <div class="cta-background">
+      <img
+        [src]="fabricsImage"
+        alt="Fabric swatches"
+        class="cta-bg-image"
+      />
+    </div>
+    
+    <div class="cta-content">
+      <div class="cta-text animate-fade-in-up">
+        <h2 class="cta-title">Design Your Dream Garment</h2>
+        <p class="cta-description">
+          Work with our master tailors to create a one-of-a-kind piece that's
+          perfectly tailored to you.
+        </p>
+        <a [routerLink]="['/custom-design']" class="cta-button">
+          Start Designing Now
+          <lucide-icon [name]="sparklesIcon" class="btn-icon"></lucide-icon>
+        </a>
+      </div>
+    </div>
+  </section>

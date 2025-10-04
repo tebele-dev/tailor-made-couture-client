@@ -1,0 +1,15 @@
+<section class="features-section">
+    <div class="container">
+      <div class="features-grid">
+        @for (feature of features; track feature.title; let index = $index) {
+          <div class="feature-card" [style.animation-delay]="index * 0.1 + 's'">
+            <div class="feature-icon">
+              <lucide-icon [name]="feature.icon" class="icon"></lucide-icon>
+            </div>
+            <h3 class="feature-title">{{ feature.title }}</h3>
+            <p class="feature-description">{{ feature.description }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>

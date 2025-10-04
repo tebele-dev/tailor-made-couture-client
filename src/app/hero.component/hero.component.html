@@ -1,0 +1,33 @@
+<section class="hero-section">
+    <div class="hero-background">
+      <img
+        [src]="heroImage"
+        alt="Custom tailoring"
+        class="hero-image"
+      />
+      <div class="hero-overlay"></div>
+    </div>
+    
+    <div class="hero-content">
+      <div class="hero-text animate-fade-in-up">
+        <h1 class="hero-title">
+          Crafted to
+          <span class="hero-accent">Perfection</span>
+        </h1>
+        <p class="hero-description">
+          Experience the art of bespoke tailoring. Every garment is meticulously crafted
+          to your unique measurements and style preferences.
+        </p>
+        <div class="hero-buttons">
+          <a [routerLink]="['/custom-design']" class="btn-primary">
+            Start Custom Design
+            <lucide-icon [name]="sparklesIcon" class="btn-icon"></lucide-icon>
+          </a>
+          <a [routerLink]="['/products']" class="btn-secondary">
+            Browse Collection
+            <lucide-icon [name]="arrowRightIcon" class="btn-icon"></lucide-icon>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>

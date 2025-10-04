@@ -1,0 +1,24 @@
+<div class="product-card">
+    <div class="product-image-container">
+      <img [src]="product.image" [alt]="product.name" class="product-image" />
+      @if (product.isCustom) {
+        <div class="custom-badge">Custom</div>
+      }
+    </div>
+    
+    <div class="product-info">
+      <div class="product-category">{{ product.category }}</div>
+      <h3 class="product-name">{{ product.name }}</h3>
+      
+      <div class="product-rating">
+        <div class="stars">
+          @for (star of getStars(product.rating); track $index) {
+            <span class="star" [class.filled]="star === 1">★</span>
+          }
+        </div>
+        <span class="rating-value">{{ product.rating }}</span>
+      </div>
+      
+      <div class="product-price">${{ product.price }}</div>
+    </div>
+  </div>
