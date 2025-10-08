@@ -1,0 +1,165 @@
+<section class="about__container" role="main">
+  <div class="about__hero-section">
+    <div class="about__hero-content">
+      <h1 class="about__hero-title">Crafting Excellence Since 1985</h1>
+      <p class="about__hero-subtitle">Where tradition meets innovation in bespoke tailoring</p>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-4 py-12">
+    <div class="about__content">
+      <!-- Our Story Section -->
+      <div class="about__content-section">
+        <div class="about__section-header">
+          <h2 class="about__section-title">Our Story</h2>
+          <div class="about__divider"></div>
+        </div>
+        
+        <div class="about__story-grid">
+          <div class="about__story-text">
+            <p>
+              TailorMade Couture began as a small atelier in Milan, founded by master tailor Giovanni Marcelli 
+              with a vision to blend traditional craftsmanship with contemporary design. Over three decades, 
+              we've evolved into a globally recognized brand while maintaining our commitment to unparalleled 
+              quality and personalized service.
+            </p>
+            <p>
+              Each garment is a testament to our dedication to precision, with over 40 hours of meticulous 
+              hand-stitching and attention to detail that defines the TailorMade experience.
+            </p>
+          </div>
+          
+          <div class="about__story-image">
+            <img 
+              src="https://images.unsplash.com/photo-1594938291221-94f18cbb5660?w=800&h=1000&fit=crop" 
+              alt="Master tailor at work" 
+              class="about__story-image"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Craftsmanship Section -->
+      <div class="about__content-section">
+        <div class="about__section-header">
+          <h2 class="about__section-title">Craftsmanship</h2>
+          <div class="about__divider"></div>
+        </div>
+        
+        <div class="about__craftsmanship-grid">
+          <div class="about__craft-card">
+            <div class="about__craft-icon">
+              <lucide-icon [name]="scissorsIcon" class="about__icon" aria-hidden="true"></lucide-icon>
+            </div>
+            <h3>Precision Cutting</h3>
+            <p>Each pattern is meticulously cut by hand using traditional techniques passed down through generations.</p>
+          </div>
+          
+          <div class="about__craft-card">
+            <div class="about__craft-icon">
+              <lucide-icon [name]="heartIcon" class="about__icon" aria-hidden="true"></lucide-icon>
+            </div>
+            <h3>Hand Stitching</h3>
+            <p>Over 40 hours of hand-stitching ensures durability and perfect fit for every garment.</p>
+          </div>
+          
+          <div class="about__craft-card">
+            <div class="about__craft-icon">
+              <lucide-icon [name]="awardIcon" class="about__icon" aria-hidden="true"></lucide-icon>
+            </div>
+            <h3>Premium Materials</h3>
+            <p>Sourced from the finest mills in Italy, Scotland, and Japan for exceptional quality.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Section -->
+      <div class="about__content-section">
+        <div class="about__section-header">
+          <h2 class="about__section-title">Meet Our Masters</h2>
+          <div class="about__divider"></div>
+        </div>
+        
+        <div class="about__team-grid">
+          <div class="about__team-member">
+            <div class="about__member-image">
+              <img 
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" 
+                alt="Master Tailor" 
+                class="about__member-photo"
+                loading="lazy"
+              />
+            </div>
+            <h3>Giovanni Marcelli</h3>
+            <p class="about__member-title">Master Tailor & Founder</p>
+            <p>40+ years of experience in bespoke tailoring</p>
+          </div>
+          
+          <div class="about__team-member">
+            <div class="about__member-image">
+              <img 
+                src="https://images.unsplash.com/photo-1504593811423-6dd665756598?w=400&h=400&fit=crop" 
+                alt="Design Director" 
+                class="about__member-photo"
+                loading="lazy"
+              />
+            </div>
+            <h3>Elena Rossi</h3>
+            <p class="about__member-title">Design Director</p>
+            <p>Former creative director at luxury fashion houses</p>
+          </div>
+          
+          <div class="about__team-member">
+            <div class="about__member-image">
+              <img 
+                src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop" 
+                alt="Head of Quality" 
+                class="about__member-photo"
+                loading="lazy"
+              />
+            </div>
+            <h3>Marco Benedetti</h3>
+            <p class="about__member-title">Head of Quality</p>
+            <p>Ensures every garment meets our exacting standards</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Connect Section -->
+      <div class="about__content-section">
+        <div class="about__section-header">
+          <h2 class="about__section-title">Connect With Us</h2>
+          <div class="about__divider"></div>
+        </div>
+        
+        <div class="about__connect-content">
+          <p class="about__connect-text">Follow us on social media for the latest updates, behind-the-scenes content, and exclusive offers.</p>
+          
+          <div class="about__social-links">
+            <a href="https://instagram.com" target="_blank" rel="noopener" class="about__social-link" aria-label="Follow us on Instagram">
+              <lucide-icon [name]="instagramIcon" class="about__social-icon" aria-hidden="true"></lucide-icon>
+              <span>Instagram</span>
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener" class="about__social-link" aria-label="Follow us on Facebook">
+              <lucide-icon [name]="facebookIcon" class="about__social-icon" aria-hidden="true"></lucide-icon>
+              <span>Facebook</span>
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener" class="about__social-link" aria-label="Follow us on Twitter">
+              <lucide-icon [name]="twitterIcon" class="about__social-icon" aria-hidden="true"></lucide-icon>
+              <span>Twitter</span>
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener" class="about__social-link" aria-label="Follow us on LinkedIn">
+              <lucide-icon [name]="linkedinIcon" class="about__social-icon" aria-hidden="true"></lucide-icon>
+              <span>LinkedIn</span>
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noopener" class="about__social-link" aria-label="Follow us on YouTube">
+              <lucide-icon [name]="youtubeIcon" class="about__social-icon" aria-hidden="true"></lucide-icon>
+              <span>YouTube</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

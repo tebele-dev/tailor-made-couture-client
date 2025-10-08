@@ -1,0 +1,36 @@
+<main class="shopper-home__main">
+  <app-hero></app-hero>
+  
+  <!-- Product type introduction -->
+  <section class="shopper-home__product-types-intro">
+    <div class="container">
+      <div class="shopper-home__intro-content">
+        <div class="shopper-home__intro-text">
+          <h2 class="shopper-home__intro-title">Two Ways to Perfect Style</h2>
+          <p class="shopper-home__intro-description">We offer two distinct approaches to acquiring your ideal garments:</p>
+        </div>
+        
+        <div class="shopper-home__product-types-grid">
+          <div class="shopper-home__product-type-card">
+            <div class="shopper-home__type-icon shopper-home__type-icon--ready-to-wear">
+              <lucide-icon [name]="packageIcon" class="icon"></lucide-icon>
+            </div>
+            <h3 class="shopper-home__type-title">Ready to Wear</h3>
+            <p class="shopper-home__type-description">Finished garments available for immediate purchase. These products are already made and ready to ship.</p>
+          </div>
+          
+          <div class="shopper-home__product-type-card">
+            <div class="shopper-home__type-icon shopper-home__type-icon--custom-design">
+              <lucide-icon [name]="settingsIcon" class="icon"></lucide-icon>
+            </div>
+            <h3 class="shopper-home__type-title">Custom Design</h3>
+            <p class="shopper-home__type-description">Create your perfect garment with our custom design service. Each product is a blueprint that can be tailored to your exact specifications.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <app-featured></app-featured>
+  <app-cd-detail></app-cd-detail>
+</main>

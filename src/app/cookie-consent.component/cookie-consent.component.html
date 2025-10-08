@@ -1,0 +1,150 @@
+<!-- Cookie Consent Banner -->
+@if (showBanner) {
+  <div class="cookie-banner">
+    <div class="cookie-banner-content">
+      <div class="cookie-banner-text">
+        <lucide-icon [name]="cookieIcon" class="cookie-icon"></lucide-icon>
+        <div>
+          <h3 class="cookie-banner-title">We use cookies</h3>
+          <p class="cookie-banner-description">
+            We use cookies to improve your experience, analyze traffic, and for marketing purposes. 
+            By clicking "Accept All", you consent to our use of cookies.
+          </p>
+        </div>
+      </div>
+      
+      <div class="cookie-banner-actions">
+        <button class="btn-outline cookie-btn" (click)="openPreferences()">
+          Preferences
+        </button>
+        <button class="btn-outline cookie-btn" (click)="acceptNecessary()">
+          Necessary Only
+        </button>
+        <button class="btn-primary cookie-btn" (click)="acceptAll()">
+          Accept All
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Cookie Preferences Dialog -->
+@if (showPreferences) {
+  <div class="cookie-preferences-overlay" (click)="closePreferences()">
+    <div class="cookie-preferences-dialog" (click)="$event.stopPropagation()">
+      <div class="cookie-preferences-header">
+        <h2 class="cookie-preferences-title">Cookie Preferences</h2>
+        <button class="cookie-preferences-close" (click)="closePreferences()">
+          <lucide-icon [name]="closeIcon" class="w-5 h-5"></lucide-icon>
+        </button>
+      </div>
+      
+      <div class="cookie-preferences-content">
+        <p class="cookie-preferences-description">
+          Manage your cookie preferences. Necessary cookies are always enabled as they are essential for the website to function.
+        </p>
+        
+        <div class="cookie-category">
+          <div class="cookie-category-header">
+            <div>
+              <h3 class="cookie-category-title">Necessary Cookies</h3>
+              <p class="cookie-category-description">
+                These cookies are essential for the website to function properly.
+              </p>
+            </div>
+            <div class="cookie-toggle">
+              <input 
+                type="checkbox" 
+                id="necessary" 
+                [(ngModel)]="preferences.necessary" 
+                disabled
+                class="cookie-checkbox"
+              >
+              <label for="necessary" class="cookie-toggle-label">
+                <span class="cookie-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="cookie-category">
+          <div class="cookie-category-header">
+            <div>
+              <h3 class="cookie-category-title">Analytics Cookies</h3>
+              <p class="cookie-category-description">
+                These cookies help us understand how visitors interact with our website.
+              </p>
+            </div>
+            <div class="cookie-toggle">
+              <input 
+                type="checkbox" 
+                id="analytics" 
+                [(ngModel)]="preferences.analytics" 
+                (change)="togglePreference('analytics')"
+                class="cookie-checkbox"
+              >
+              <label for="analytics" class="cookie-toggle-label">
+                <span class="cookie-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="cookie-category">
+          <div class="cookie-category-header">
+            <div>
+              <h3 class="cookie-category-title">Marketing Cookies</h3>
+              <p class="cookie-category-description">
+                These cookies are used to track visitors across websites to display relevant ads.
+              </p>
+            </div>
+            <div class="cookie-toggle">
+              <input 
+                type="checkbox" 
+                id="marketing" 
+                [(ngModel)]="preferences.marketing" 
+                (change)="togglePreference('marketing')"
+                class="cookie-checkbox"
+              >
+              <label for="marketing" class="cookie-toggle-label">
+                <span class="cookie-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="cookie-category">
+          <div class="cookie-category-header">
+            <div>
+              <h3 class="cookie-category-title">Preference Cookies</h3>
+              <p class="cookie-category-description">
+                These cookies enable the website to provide enhanced functionality and personalization.
+              </p>
+            </div>
+            <div class="cookie-toggle">
+              <input 
+                type="checkbox" 
+                id="preferences" 
+                [(ngModel)]="preferences.preferences" 
+                (change)="togglePreference('preferences')"
+                class="cookie-checkbox"
+              >
+              <label for="preferences" class="cookie-toggle-label">
+                <span class="cookie-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="cookie-preferences-footer">
+        <button class="btn-outline" (click)="acceptNecessary()">
+          Reject All
+        </button>
+        <button class="btn-primary" (click)="savePreferences()">
+          Save Preferences
+        </button>
+      </div>
+    </div>
+  </div>
+}

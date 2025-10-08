@@ -1,0 +1,282 @@
+/* Address Book Component Styles - Compact and Uniform Design */
+
+.address-card {
+  position: relative;
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  transition: var(--transition-default);
+  min-height: 120px;
+  /* Ensure proper alignment */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  
+  /* BEM modifiers */
+  &--compact {
+    padding: var(--space-2);
+    min-height: 100px;
+  }
+  
+  &--expanded {
+    padding: var(--space-4);
+    min-height: 140px;
+  }
+  
+  &--selected {
+    border-color: hsl(var(--accent));
+    box-shadow: 0 0 0 2px hsl(var(--accent) / 0.2);
+  }
+}
+
+.address-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  border-color: hsl(var(--accent));
+}
+
+.address-content {
+  margin-bottom: var(--space-3);
+  /* Ensure proper alignment */
+  flex: 1;
+  
+  /* BEM elements */
+  &__container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  
+  &__name {
+    font-weight: 600;
+    color: hsl(var(--foreground));
+    
+    /* Visual hierarchy improvements */
+    &__heading {
+      font-weight: 600;
+      color: hsl(var(--foreground));
+    }
+  }
+  
+  &__address {
+    font-size: 0.875rem;
+    color: hsl(var(--muted-foreground));
+    line-height: 1.5;
+    margin-top: var(--space-1);
+    
+    /* Visual hierarchy improvements */
+    &__text {
+      font-size: 0.875rem;
+      color: hsl(var(--muted-foreground));
+      line-height: 1.5;
+      margin-top: var(--space-1);
+    }
+  }
+}
+
+.default-badge {
+  position: absolute;
+  top: var(--space-1-5);
+  right: var(--space-1-5);
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  font-size: 0.6875rem;
+  font-weight: 600;
+  padding: 0.1875rem 0.375rem;
+  border-radius: var(--radius-full);
+  /* Ensure proper z-index */
+  z-index: var(--z-1);
+  
+  /* BEM modifiers */
+  &--compact {
+    font-size: 0.625rem;
+    padding: 0.125rem 0.25rem;
+  }
+  
+  &--large {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+.address-actions {
+  display: flex;
+  gap: var(--space-1-5);
+  justify-content: flex-end;
+  /* Ensure proper alignment */
+  align-items: center;
+  margin-top: var(--space-2);
+  
+  /* BEM elements */
+  &__container {
+    display: flex;
+    gap: var(--space-1-5);
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  &__buttons {
+    display: flex;
+    gap: var(--space-1);
+  }
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-md);
+  background: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  cursor: pointer;
+  transition: var(--transition-fast);
+  font-size: 0.75rem;
+  /* Ensure adequate touch targets */
+  min-width: 44px;
+  min-height: 44px;
+  
+  /* BEM modifiers */
+  &--primary {
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+    border-color: hsl(var(--accent));
+  }
+  
+  &--secondary {
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+  
+  &--danger {
+    background: hsl(var(--destructive));
+    color: hsl(var(--destructive-foreground));
+    border-color: hsl(var(--destructive));
+  }
+  
+  &--compact {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.6875rem;
+  }
+  
+  &--large {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.875rem;
+  }
+}
+
+.action-btn:hover:not(:disabled) {
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  border-color: hsl(var(--accent));
+}
+
+.action-btn:hover:not(:disabled).action-btn--active {
+  background: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  border-color: hsl(var(--accent));
+}
+
+.action-btn.danger:hover {
+  background: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+  border-color: hsl(var(--destructive));
+}
+
+.action-btn.danger:hover.action-btn--active {
+  background: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+  border-color: hsl(var(--destructive));
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.form-checkbox {
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 0.25rem;
+  border: 2px solid hsl(var(--border));
+  appearance: none;
+  position: relative;
+  cursor: pointer;
+  /* Ensure adequate touch targets */
+  min-width: 44px;
+  min-height: 44px;
+  margin: 2px;
+  
+  /* BEM modifiers */
+  &--large {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  
+  &--small {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  &--checked {
+    background-color: hsl(var(--accent));
+    border-color: hsl(var(--accent));
+  }
+  
+  &--checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 0.6875rem;
+    font-weight: bold;
+  }
+}
+
+.form-checkbox:checked {
+  background-color: hsl(var(--accent));
+  border-color: hsl(var(--accent));
+}
+
+.form-checkbox:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 0.6875rem;
+  font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .address-actions {
+    gap: var(--space-1);
+  }
+  
+  .action-btn {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.6875rem;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .address-card {
+    padding: var(--space-2-5);
+    min-height: 100px;
+  }
+  
+  .form-checkbox {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

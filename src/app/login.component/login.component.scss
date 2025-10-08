@@ -1,0 +1,117 @@
+.login {
+  &__container {
+    /* Inherits global tokens; local overrides can go here if needed */
+  }
+
+  &__card {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  &__title {
+    margin-bottom: 12px;
+  }
+
+  &__error {
+    color: var(--color-danger);
+    margin-bottom: 8px;
+    role: alert;
+  }
+
+  &__form {
+    display: grid;
+    gap: 12px;
+  }
+
+  &__form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__label {
+    font-weight: 600;
+    color: var(--color-muted);
+  }
+
+  &__input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-foreground);
+
+    &:focus {
+      outline: none;
+      border-color: color-mix(in srgb, var(--color-accent), transparent 40%);
+    }
+  }
+
+  &__submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--color-border);
+    color: var(--color-foreground);
+    background: linear-gradient(180deg, var(--color-surface), var(--color-surface-2));
+    box-shadow: var(--shadow-sm);
+    transition: all .25s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: var(--font-semibold);
+    font-size: var(--text-base);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--color-accent), #a47148);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      z-index: -1;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      border-color: var(--color-accent);
+      box-shadow: var(--shadow-md);
+      color: var(--color-accent-foreground);
+      
+      &::before {
+        opacity: 1;
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: var(--shadow-sm);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+
+  &__signup-link {
+    margin-top: 20px;
+    text-align: center;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+
+    &-anchor {
+      color: var(--color-accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+  }
+}

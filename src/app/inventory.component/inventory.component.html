@@ -1,0 +1,239 @@
+<div class="inventory-container">
+  <div class="container mx-auto px-4 py-8">
+    <div class="inventory-header">
+      <h1 class="page-title">Inventory Management</h1>
+      <p class="page-description">Manage your product inventory and stock levels</p>
+    </div>
+
+    <!-- Inventory Controls -->
+    <div class="inventory-controls">
+      <div class="controls-left">
+        <div class="search-box">
+          <input 
+            type="text" 
+            [(ngModel)]="searchQuery" 
+            placeholder="Search products..."
+            class="search-input"
+          />
+        </div>
+        
+        <div class="filter-box">
+          <select [(ngModel)]="selectedCategory" class="filter-select">
+            @for (category of categories; track category.value) {
+              <option [value]="category.value">{{ category.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      
+      <div class="controls-right">
+        <button (click)="toggleAddForm()" class="btn-primary">
+          <lucide-icon name="plus"></lucide-icon>
+          Add Product
+        </button>
+      </div>
+    </div>
+
+    <!-- Add/Edit Form -->
+    @if (showAddForm) {
+      <div class="form-container card">
+        <h2>{{ editingItem ? 'Edit Product' : 'Add New Product' }}</h2>
+        
+        <form (ngSubmit)="saveProduct()" class="product-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Product Name *</label>
+              <input 
+                id="name"
+                type="text" 
+                [(ngModel)]="newProduct.name" 
+                name="name" 
+                class="form-input"
+                required
+              />
+            </div>
+            
+            <div class="form-group">
+              <label for="price">Price ($) *</label>
+              <input 
+                id="price"
+                type="number" 
+                [(ngModel)]="newProduct.price" 
+                name="price" 
+                class="form-input"
+                min="0"
+                step="0.01"
+                required
+              />
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="category">Category *</label>
+              <select 
+                id="category"
+                [(ngModel)]="newProduct.category" 
+                name="category" 
+                class="form-input"
+                required
+              >
+                <option value="">Select Category</option>
+                @for (category of categories.slice(1); track category.value) {
+                  <option [value]="category.value">{{ category.label }}</option>
+                }
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="stock">Stock Quantity *</label>
+              <input 
+                id="stock"
+                type="number" 
+                [(ngModel)]="newProduct.stock" 
+                name="stock" 
+                class="form-input"
+                min="0"
+                required
+              />
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="image">Image URL</label>
+              <input 
+                id="image"
+                type="text" 
+                [(ngModel)]="newProduct.image" 
+                name="image" 
+                class="form-input"
+                placeholder="https://example.com/image.jpg"
+              />
+            </div>
+            
+            <div class="form-group">
+              <label for="supplier">Supplier</label>
+              <input 
+                id="supplier"
+                type="text" 
+                [(ngModel)]="newProduct.supplier" 
+                name="supplier" 
+                class="form-input"
+              />
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="rating">Rating (0-5)</label>
+              <input 
+                id="rating"
+                type="number" 
+                [(ngModel)]="newProduct.rating" 
+                name="rating" 
+                class="form-input"
+                min="0"
+                max="5"
+                step="0.1"
+              />
+            </div>
+            
+            <div class="form-group checkbox-group">
+              <label>
+                <input 
+                  type="checkbox" 
+                  [(ngModel)]="newProduct.isCustom" 
+                  name="isCustom" 
+                />
+                Custom Design Product
+              </label>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" (click)="cancelEdit()" class="btn-outline">Cancel</button>
+            <button type="submit" class="btn-primary">
+              {{ editingItem ? 'Update Product' : 'Add Product' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    }
+
+    <!-- Inventory Stats -->
+    <div class="inventory-stats">
+      <div class="stat-card">
+        <div class="stat-value">{{ inventoryItems.length }}</div>
+        <div class="stat-label">Total Products</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-value">{{ getTotalStock() }}</div>
+        <div class="stat-label">Total Stock</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-value">${{ getInventoryValue() }}</div>
+        <div class="stat-label">Inventory Value</div>
+      </div>
+    </div>
+
+    <!-- Inventory Table -->
+    <div class="inventory-table-container card">
+      <table class="inventory-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Supplier</th>
+            <th>Last Updated</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of filteredInventory; track item.id) {
+            <tr>
+              <td>
+                <div class="product-info">
+                  <img [src]="item.image" [alt]="item.name" class="product-image" />
+                  <div>
+                    <div class="product-name">{{ item.name }}</div>
+                    @if (item.isCustom) {
+                      <span class="custom-badge">Custom</span>
+                    }
+                  </div>
+                </div>
+              </td>
+              <td>{{ item.category }}</td>
+              <td>${{ item.price.toFixed(2) }}</td>
+              <td>
+                <span [class.low-stock]="item.stock < 10">{{ item.stock }}</span>
+              </td>
+              <td>{{ item.supplier }}</td>
+              <td>{{ item.lastUpdated }}</td>
+              <td>
+                <div class="action-buttons">
+                  <button (click)="editProduct(item)" class="btn-icon edit">
+                    <lucide-icon name="edit"></lucide-icon>
+                  </button>
+                  <button (click)="deleteProduct(item.id)" class="btn-icon delete">
+                    <lucide-icon name="trash-2"></lucide-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      
+      @if (filteredInventory.length === 0) {
+        <div class="no-results">
+          <p>No products found matching your criteria.</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>

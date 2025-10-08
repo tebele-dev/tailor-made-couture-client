@@ -1,0 +1,126 @@
+<div class="fabric-container">
+  <div class="container mx-auto px-4 py-8">
+    <div class="fabric-header">
+      <h1 class="page-title">Fabric Selection</h1>
+      <p class="page-description">Choose fabrics for your custom design</p>
+    </div>
+
+    <!-- Product Selection -->
+    <div class="section">
+      <h2>Select Product</h2>
+      <div class="controls">
+        <div class="search-box">
+          <input 
+            type="text" 
+            [(ngModel)]="searchQuery" 
+            placeholder="Search products..."
+            class="search-input"
+          />
+        </div>
+        
+        <div class="filter-box">
+          <select [(ngModel)]="selectedCategory" class="filter-select">
+            @for (category of categories; track category.value) {
+              <option [value]="category.value">{{ category.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      
+      <div class="products-grid">
+        @for (product of filteredProducts; track product.id) {
+          <div 
+            class="product-card" 
+            [class.selected]="selectedProduct?.id === product.id"
+            (click)="selectProduct(product)"
+          >
+            <img [src]="product.image" [alt]="product.name" class="product-image" />
+            <div class="product-info">
+              <h3 class="product-name">{{ product.name }}</h3>
+              <p class="product-category">{{ product.category }}</p>
+              @if (product.isCustom) {
+                <span class="custom-badge">Custom</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Fabric Selection Panel -->
+    @if (selectedProduct) {
+      <div class="section">
+        <div class="fabric-header-row">
+          <h2>Select Fabrics for: {{ selectedProduct.name }}</h2>
+          <div class="price-display">
+            <span class="base-price">Base Price: {{ selectedProduct.price | currency }}</span>
+            <span class="total-price">Total: {{ calculateTotalPrice() | currency }}</span>
+          </div>
+        </div>
+        
+        <div class="fabric-categories">
+          @for (category of fabricCategories; track category.name) {
+            <div class="fabric-category">
+              <h3>{{ category.name }}</h3>
+              <div class="fabric-options">
+                @for (fabric of category.options; track fabric.id) {
+                  <div 
+                    class="fabric-option" 
+                    [class.selected]="getSelectedFabric(category.name)?.id === fabric.id"
+                    (click)="selectFabric(category.name, fabric)"
+                  >
+                    <div class="fabric-swatch" [style.background-color]="fabric.swatchColor"></div>
+                    <div class="fabric-details">
+                      <h4>{{ fabric.name }}</h4>
+                      <p class="fabric-description">{{ fabric.description }}</p>
+                      <div class="fabric-price">
+                        @if (fabric.priceModifier > 0) {
+                          <span class="price-increase">+{{ fabric.priceModifier }}%</span>
+                        } @else if (fabric.priceModifier < 0) {
+                          <span class="price-decrease">{{ fabric.priceModifier }}%</span>
+                        } @else {
+                          <span class="price-neutral">No change</span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+        
+        <div class="actions">
+          <button type="button" class="btn-outline" (click)="cancelSelection()">Cancel</button>
+          <button type="button" class="btn-primary" (click)="saveFabricSelection()">Save Selection</button>
+        </div>
+      </div>
+    }
+
+    <!-- Selected Fabrics Summary -->
+    @if (selectedProduct && getSelectedFabricCount() > 0) {
+      <div class="section">
+        <h2>Selected Fabrics Summary</h2>
+        <div class="summary-grid">
+          @for (category of fabricCategories; track category.name) {
+            @if (getSelectedFabric(category.name)) {
+              <div class="summary-item">
+                <h4>{{ category.name }}</h4>
+                <div class="summary-details">
+                  <span class="fabric-name">{{ getSelectedFabric(category.name)?.name }}</span>
+                  <span class="fabric-price-modifier">
+                    @if (getSelectedFabric(category.name)?.priceModifier! > 0) {
+                      (+{{ getSelectedFabric(category.name)?.priceModifier }}%)
+                    } @else if (getSelectedFabric(category.name)?.priceModifier! < 0) {
+                      ({{ getSelectedFabric(category.name)?.priceModifier }}%)
+                    }
+                  </span>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

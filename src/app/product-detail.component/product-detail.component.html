@@ -1,0 +1,178 @@
+@if (product) {
+  <section class="container mx-auto px-4 py-12" role="main">
+    <div class="product-detail__grid">
+      <!-- Image Gallery -->
+      <div class="product-detail__media-section">
+        <div class="product-detail__main-image-container">
+          <img 
+            [src]="product.images[selectedImageIndex]" 
+            [alt]="product.name" 
+            class="product-detail__main-image"
+            loading="eager"
+          />
+        </div>
+        
+        @if (product.images.length > 1) {
+          <div class="product-detail__thumbnail-gallery" role="group" aria-label="Product images">
+            @for (image of product.images; track $index) {
+              <button 
+                class="product-detail__thumbnail" 
+                [class.active]="selectedImageIndex === $index"
+                (click)="setSelectedImage($index)"
+                aria-label="View image {{ $index + 1 }} of {{ product.name }}"
+              >
+                <img [src]="image" [alt]="product.name + ' ' + ($index + 1)" loading="lazy" />
+              </button>
+            }
+          </div>
+        }
+      </div>
+      
+      <!-- Product Information -->
+      <div class="product-detail__info-section">
+        <div class="product-detail__header">
+          <div class="product-detail__category">{{ product.category }}</div>
+          <h1 class="product-detail__title">{{ product.name }}</h1>
+          
+          @if (product.isCustom) {
+            <div class="product-detail__type-badge product-detail__type-badge--custom" aria-label="Custom Blueprint">Custom Blueprint</div>
+          } @else {
+            <div class="product-detail__type-badge product-detail__type-badge--ready" aria-label="Ready to Wear">Ready to Wear</div>
+          }
+        </div>
+        
+        <div class="product-detail__rating" aria-label="{{product.rating}} out of 5 stars">
+          <div class="product-detail__stars">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+              <span class="product-detail__star" [class.filled]="star <= getFloor(product.rating)" aria-hidden="true">
+                ★
+              </span>
+            }
+          </div>
+          <span class="product-detail__rating-value">{{ product.rating }}</span>
+        </div>
+        
+        <div class="product-detail__price">{{ product.price | currency }}</div>
+        
+        <p class="product-detail__description">{{ product.description }}</p>
+        
+        @if (product.isCustom) {
+          <div class="product-detail__type-explanation">
+            <h3>Custom Blueprint</h3>
+            <p>This product is a customizable blueprint. You can tailor every detail to your exact specifications through our Custom Design Studio.</p>
+            <button class="btn-primary" (click)="customizeProduct()" aria-label="Customize {{ product.name }}">
+              Customize This Blueprint
+            </button>
+          </div>
+        } @else {
+          <div class="product-detail__type-explanation">
+            <h3>Ready to Wear</h3>
+            <p>This is a finished garment ready for immediate purchase and shipping. All details are finalized as shown.</p>
+          </div>
+        }
+        
+        <!-- Product Details Tabs -->
+        <div class="product-detail__tabs" role="tablist">
+          <button 
+            class="product-detail__tab-trigger" 
+            [class.active]="selectedTab === 'description'"
+            (click)="setSelectedTab('description')"
+            role="tab"
+            aria-selected="selectedTab === 'description'"
+            aria-controls="description-panel"
+          >
+            Description
+          </button>
+          <button 
+            class="product-detail__tab-trigger" 
+            [class.active]="selectedTab === 'details'"
+            (click)="setSelectedTab('details')"
+            role="tab"
+            aria-selected="selectedTab === 'details'"
+            aria-controls="details-panel"
+          >
+            Details
+          </button>
+          @if (product.measurements) {
+            <button 
+              class="product-detail__tab-trigger" 
+              [class.active]="selectedTab === 'measurements'"
+              (click)="setSelectedTab('measurements')"
+              role="tab"
+              aria-selected="selectedTab === 'measurements'"
+              aria-controls="measurements-panel"
+            >
+              Measurements
+            </button>
+          }
+        </div>
+        
+        <!-- Tab Content -->
+        <div class="product-detail__tab-content">
+          @if (selectedTab === 'description') {
+            <div class="tab-pane" id="description-panel" role="tabpanel" aria-labelledby="description-tab">
+              <p>{{ product.description }}</p>
+            </div>
+          }
+          
+          @if (selectedTab === 'details') {
+            <div class="tab-pane" id="details-panel" role="tabpanel" aria-labelledby="details-tab">
+              <div class="product-detail__details-grid">
+                <div class="product-detail__detail-item">
+                  <span class="product-detail__detail-label">Material:</span>
+                  <span class="product-detail__detail-value">{{ product.details.material }}</span>
+                </div>
+                <div class="product-detail__detail-item">
+                  <span class="product-detail__detail-label">Color:</span>
+                  <span class="product-detail__detail-value">{{ product.details.color }}</span>
+                </div>
+                <div class="product-detail__detail-item">
+                  <span class="product-detail__detail-label">Size:</span>
+                  <span class="product-detail__detail-value">{{ product.details.size }}</span>
+                </div>
+                <div class="product-detail__detail-item">
+                  <span class="product-detail__detail-label">Care:</span>
+                  <span class="product-detail__detail-value">{{ product.details.care }}</span>
+                </div>
+              </div>
+            </div>
+          }
+          
+          @if (selectedTab === 'measurements' && product.measurements) {
+            <div class="tab-pane" id="measurements-panel" role="tabpanel" aria-labelledby="measurements-tab">
+              <p>For custom orders, please provide the following measurements:</p>
+              <ul class="product-detail__measurements-list">
+                @for (measurement of product.measurements; track measurement) {
+                  <li>{{ measurement }}</li>
+                }
+              </ul>
+            </div>
+          }
+        </div>
+        
+        <div class="product-detail__actions">
+          @if (!product.isCustom) {
+            <button class="btn-primary" (click)="addToCart()" aria-label="Add {{ product.name }} to cart">
+              Add to Cart
+            </button>
+          }
+          <a [routerLink]="['/products']" class="btn-outline" aria-label="Back to products">
+            Back to products
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+} @else {
+  <div class="container mx-auto px-4 py-12" role="main">
+    <div class="not-found-container">
+      <div class="not-found-content">
+        <h1 class="error-code">404</h1>
+        <p class="error-message">Oops! Product not found</p>
+        <a [routerLink]="['/products']" class="home-link btn-primary" aria-label="Return to products page">
+          Return to Home
+        </a>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,554 @@
+<div class="admin-design-container">
+  <div class="container mx-auto px-4 py-8">
+    <div class="admin-header">
+      <h1 class="page-title">Custom Design Blueprint Management</h1>
+      <p class="page-description">Manage custom design blueprints and their configurable properties</p>
+    </div>
+
+    <div class="admin-content">
+        <!-- Product Selection -->
+        <div class="section">
+          <div class="section-header">
+            <h2>Select Custom Blueprint</h2>
+            <button class="btn-primary" (click)="toggleNewProductForm()">
+              {{ showNewProductForm ? 'Cancel New Blueprint' : 'Create New Blueprint' }}
+            </button>
+          </div>
+          
+          <div class="controls">
+            <div class="search-box">
+              <input 
+                type="text" 
+                [(ngModel)]="searchQuery" 
+                placeholder="Search blueprints..."
+                class="search-input"
+              />
+            </div>
+            
+            <div class="filter-box">
+              <select [(ngModel)]="selectedCategory" class="filter-select">
+                @for (category of categories; track category.value) {
+                  <option [value]="category.value">{{ category.label }}</option>
+                }
+              </select>
+            </div>
+          </div>
+          
+          <!-- New Product Form -->
+          @if (showNewProductForm) {
+            <div class="section new-product-form">
+              <h3>Create New Custom Blueprint</h3>
+              <div class="form-group">
+                <div class="form-row">
+                  <div class="form-field">
+                    <label for="productName">Blueprint Name</label>
+                    <input 
+                      id="productName"
+                      type="text" 
+                      [(ngModel)]="newProduct.name" 
+                      placeholder="e.g., Custom Formal Shirt"
+                      class="form-input"
+                    />
+                  </div>
+                  
+                  <div class="form-field">
+                    <label for="productPrice">Starting Price ($)</label>
+                    <input 
+                      id="productPrice"
+                      type="number" 
+                      [(ngModel)]="newProduct.price" 
+                      min="0"
+                      step="0.01"
+                      class="form-input"
+                    />
+                  </div>
+                </div>
+                
+                <div class="form-row">
+                  <div class="form-field">
+                    <label for="productCategory">Category</label>
+                    <select 
+                      id="productCategory"
+                      [(ngModel)]="newProduct.category" 
+                      class="form-input"
+                    >
+                      @for (category of productCategories; track category) {
+                        <option [value]="category">{{ category }}</option>
+                      }
+                    </select>
+                  </div>
+                  
+                  <div class="form-field">
+                    <label for="productImage">Image URL</label>
+                    <input 
+                      id="productImage"
+                      type="text" 
+                      [(ngModel)]="newProduct.image" 
+                      placeholder="https://example.com/image.jpg"
+                      class="form-input"
+                    />
+                  </div>
+                </div>
+                
+                <div class="form-field">
+                  <label for="productDescription">Description</label>
+                  <textarea 
+                    id="productDescription"
+                    [(ngModel)]="newProduct.description" 
+                    placeholder="Describe this custom blueprint..."
+                    class="form-input"
+                    rows="3"
+                  ></textarea>
+                </div>
+                
+                <h4>Product Details</h4>
+                <div class="form-row">
+                  <div class="form-field">
+                    <label for="productMaterial">Material</label>
+                    <input 
+                      id="productMaterial"
+                      type="text" 
+                      [(ngModel)]="newProduct.details.material" 
+                      placeholder="e.g., 100% Egyptian Cotton"
+                      class="form-input"
+                    />
+                  </div>
+                  
+                  <div class="form-field">
+                    <label for="productColor">Color Options</label>
+                    <input 
+                      id="productColor"
+                      type="text" 
+                      [(ngModel)]="newProduct.details.color" 
+                      placeholder="e.g., White, Blue, Pink"
+                      class="form-input"
+                    />
+                  </div>
+                </div>
+                
+                <div class="form-row">
+                  <div class="form-field">
+                    <label for="productSize">Size Options</label>
+                    <input 
+                      id="productSize"
+                      type="text" 
+                      [(ngModel)]="newProduct.details.size" 
+                      placeholder="e.g., S, M, L, XL"
+                      class="form-input"
+                    />
+                  </div>
+                  
+                  <div class="form-field">
+                    <label for="productCare">Care Instructions</label>
+                    <input 
+                      id="productCare"
+                      type="text" 
+                      [(ngModel)]="newProduct.details.care" 
+                      placeholder="e.g., Machine wash cold"
+                      class="form-input"
+                    />
+                  </div>
+                </div>
+                
+                <div class="actions">
+                  <button type="button" class="btn-outline" (click)="cancelEdit()">Cancel</button>
+                  <button type="button" class="btn-primary" (click)="createNewProduct()" [disabled]="!newProduct.name || newProduct.price <= 0">
+                    Create Blueprint
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+          
+          <div class="products-grid">
+            @for (product of filteredProducts; track product.id) {
+              <div 
+                class="product-card" 
+                [class.selected]="selectedProduct?.id === product.id"
+                (click)="selectProduct(product)"
+              >
+                <img [src]="product.image" [alt]="product.name" class="product-image" />
+                <div class="product-info">
+                  <h3 class="product-name">{{ product.name }}</h3>
+                  <p class="product-category">{{ product.category }}</p>
+                  @if (product.isCustom) {
+                    <span class="custom-badge">Custom Blueprint</span>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Configuration Panel -->
+        @if (selectedProduct) {
+          <div class="section">
+            <h2>Configure Blueprint: {{ selectedProduct.name }}</h2>
+            
+            <div class="config-panel">
+              <!-- Measurements Section -->
+              <div class="form-group">
+                <h3>Measurements</h3>
+                <label>Current Measurements</label>
+                <div class="measurements-list">
+                  @if (selectedProduct.measurements && selectedProduct.measurements.length > 0) {
+                    @for (measurement of selectedProduct.measurements; track $index) {
+                      <div class="measurement-item">
+                        <span>{{ measurement }}</span>
+                        <button 
+                          type="button" 
+                          class="remove-btn" 
+                          (click)="removeMeasurement($index)"
+                        >
+                          <lucide-icon name="x"></lucide-icon>
+                        </button>
+                      </div>
+                    }
+                  } @else {
+                    <p class="no-measurements">No measurements configured for this blueprint.</p>
+                  }
+                </div>
+                
+                <div class="input-group">
+                  <input 
+                    type="text" 
+                    [(ngModel)]="newMeasurement" 
+                    placeholder="e.g., Chest, Waist, Sleeve Length"
+                    class="form-input"
+                    (keyup.enter)="addMeasurement()"
+                  />
+                  <button 
+                    type="button" 
+                    class="btn-primary" 
+                    (click)="addMeasurement()"
+                    [disabled]="!newMeasurement.trim()"
+                  >
+                    Add Measurement
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Custom Properties Section -->
+              <div class="form-group">
+                <h3>Custom Properties</h3>
+                <div class="custom-properties-list">
+                  @if (selectedProduct.customProperties && selectedProduct.customProperties.length > 0) {
+                    @for (property of selectedProduct.customProperties; track $index) {
+                      <div class="property-item">
+                        <div class="property-info">
+                          <h4>{{ property.name }}</h4>
+                          <p class="property-meta">
+                            Type: {{ property.type }} | 
+                            Category: {{ property.category }} |
+                            @if (property.required) {
+                              <span class="required">Required</span>
+                            } @else {
+                              <span class="optional">Optional</span>
+                            }
+                          </p>
+                          @if (property.options && property.options.length > 0) {
+                            <p class="property-options">
+                              Options: {{ property.options.join(', ') }}
+                            </p>
+                          }
+                        </div>
+                        <button 
+                          type="button" 
+                          class="remove-btn" 
+                          (click)="removeCustomProperty($index)"
+                        >
+                          <lucide-icon name="x"></lucide-icon>
+                        </button>
+                      </div>
+                    }
+                  } @else {
+                    <p class="no-properties">No custom properties configured for this blueprint.</p>
+                  }
+                </div>
+                
+                <!-- Add New Custom Property Form -->
+                <div class="new-property-form">
+                  <h4>Add New Property</h4>
+                  <div class="form-row">
+                    <div class="form-field">
+                      <label for="propertyName">Property Name</label>
+                      <input 
+                        id="propertyName"
+                        type="text" 
+                        [(ngModel)]="newCustomProperty.name" 
+                        placeholder="e.g., Collar Style, Button Type"
+                        class="form-input"
+                      />
+                    </div>
+                    
+                    <div class="form-field">
+                      <label for="propertyType">Type</label>
+                      <select 
+                        id="propertyType"
+                        [(ngModel)]="newCustomProperty.type" 
+                        class="form-input"
+                      >
+                        @for (type of propertyTypes; track type.value) {
+                          <option [value]="type.value">{{ type.label }}</option>
+                        }
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div class="form-row">
+                    <div class="form-field">
+                      <label for="propertyCategory">Category</label>
+                      <select 
+                        id="propertyCategory"
+                        [(ngModel)]="newCustomProperty.category" 
+                        class="form-input"
+                      >
+                        @for (category of propertyCategories; track category.value) {
+                          <option [value]="category.value">{{ category.label }}</option>
+                        }
+                      </select>
+                    </div>
+                    
+                    <div class="form-field checkbox-field">
+                      <label>
+                        <input 
+                          type="checkbox" 
+                          [(ngModel)]="newCustomProperty.required"
+                        />
+                        Required Property
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <!-- Options for selection type -->
+                  @if (newCustomProperty.type === 'selection') {
+                    <div class="form-field">
+                      <label>Add Options</label>
+                      <div class="input-group">
+                        <input 
+                          type="text" 
+                          [(ngModel)]="newOption" 
+                          placeholder="Add option and press Enter"
+                          class="form-input"
+                          (keyup.enter)="addOption()"
+                        />
+                        <button 
+                          type="button" 
+                          class="btn-outline" 
+                          (click)="addOption()"
+                          [disabled]="!newOption.trim()"
+                        >
+                          Add Option
+                        </button>
+                      </div>
+                      
+                      @if (newCustomProperty.options && newCustomProperty.options.length > 0) {
+                        <div class="options-list">
+                          @for (option of newCustomProperty.options; track $index) {
+                            <div class="option-item">
+                              <span>{{ option }}</span>
+                              <button 
+                                type="button" 
+                                class="remove-option-btn" 
+                                (click)="removeOption($index)"
+                              >
+                                <lucide-icon name="x" class="option-icon"></lucide-icon>
+                              </button>
+                            </div>
+                          }
+                        </div>
+                      }
+                    </div>
+                  }
+                  
+                  <button 
+                    type="button" 
+                    class="btn-primary" 
+                    (click)="addCustomProperty()"
+                    [disabled]="!newCustomProperty.name.trim()"
+                  >
+                    Add Property
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Fabric Options Section -->
+              <div class="form-group">
+                <h3>Fabric Options</h3>
+                <div class="fabric-options-list">
+                  @if (selectedProduct.fabricOptions && selectedProduct.fabricOptions.length > 0) {
+                    @for (fabric of selectedProduct.fabricOptions; track $index) {
+                      <div class="fabric-option-item">
+                        <div class="fabric-option-info">
+                          <div class="fabric-swatch" [style.background-color]="fabric.swatchColor"></div>
+                          <div class="fabric-details">
+                            <h4>{{ fabric.name }}</h4>
+                            <p class="fabric-category">{{ fabric.category }}</p>
+                            <p class="fabric-description">{{ fabric.description }}</p>
+                            <p class="fabric-price-modifier">
+                              @if (fabric.priceModifier > 0) {
+                                <span class="price-increase">+{{ fabric.priceModifier }}%</span>
+                              } @else if (fabric.priceModifier < 0) {
+                                <span class="price-decrease">{{ fabric.priceModifier }}%</span>
+                              } @else {
+                                <span class="price-neutral">No change</span>
+                              }
+                            </p>
+                          </div>
+                        </div>
+                        <button 
+                          type="button" 
+                          class="remove-btn" 
+                          (click)="removeFabricOption($index)"
+                        >
+                          <lucide-icon name="x"></lucide-icon>
+                        </button>
+                      </div>
+                    }
+                  } @else {
+                    <p class="no-fabric-options">No fabric options configured for this blueprint.</p>
+                  }
+                </div>
+                
+                <!-- Add New Fabric Option Form -->
+                <div class="new-fabric-option-form">
+                  <h4>Add New Fabric Option</h4>
+                  <div class="form-row">
+                    <div class="form-field">
+                      <label for="fabricName">Fabric Name</label>
+                      <input 
+                        id="fabricName"
+                        type="text" 
+                        [(ngModel)]="newFabricOption.name" 
+                        placeholder="e.g., Italian Wool, Cashmere Blend"
+                        class="form-input"
+                      />
+                    </div>
+                    
+                    <div class="form-field">
+                      <label for="fabricCategory">Category</label>
+                      <select 
+                        id="fabricCategory"
+                        [(ngModel)]="newFabricOption.category" 
+                        class="form-input"
+                      >
+                        @for (category of fabricCategories; track category.value) {
+                          <option [value]="category.value">{{ category.label }}</option>
+                        }
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div class="form-row">
+                    <div class="form-field">
+                      <label for="fabricImage">Image URL</label>
+                      <input 
+                        id="fabricImage"
+                        type="text" 
+                        [(ngModel)]="newFabricOption.image" 
+                        placeholder="https://example.com/fabric-image.jpg"
+                        class="form-input"
+                      />
+                    </div>
+                    
+                    <div class="form-field">
+                      <label for="fabricPriceModifier">Price Modifier (%)</label>
+                      <input 
+                        id="fabricPriceModifier"
+                        type="number" 
+                        [(ngModel)]="newFabricOption.priceModifier" 
+                        class="form-input"
+                        min="-100"
+                        max="100"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div class="form-row">
+                    <div class="form-field">
+                      <label for="fabricSwatchColor">Swatch Color</label>
+                      <input 
+                        id="fabricSwatchColor"
+                        type="color" 
+                        [(ngModel)]="newFabricOption.swatchColor" 
+                        class="form-input color-picker"
+                      />
+                    </div>
+                    
+                    <div class="form-field">
+                      <label for="fabricDescription">Description</label>
+                      <input 
+                        id="fabricDescription"
+                        type="text" 
+                        [(ngModel)]="newFabricOption.description" 
+                        placeholder="e.g., Premium Italian wool with superior texture"
+                        class="form-input"
+                      />
+                    </div>
+                  </div>
+                  
+                  <button 
+                    type="button" 
+                    class="btn-primary" 
+                    (click)="addFabricOption()"
+                    [disabled]="!newFabricOption.name.trim()"
+                  >
+                    Add Fabric Option
+                  </button>
+                </div>
+              </div>
+              
+              <div class="actions">
+                <button type="button" class="btn-outline" (click)="cancelEdit()">Cancel</button>
+                <button type="button" class="btn-primary" (click)="saveConfig()">Save Blueprint</button>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Active Configurations -->
+        <div class="section">
+          <h2>Active Custom Blueprints</h2>
+          
+          <div class="configs-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Blueprint</th>
+                  <th>Measurements</th>
+                  <th>Custom Properties</th>
+                  <th>Fabric Options</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (config of customConfigs; track config.id) {
+                  <tr>
+                    <td>{{ config.productName }}</td>
+                    <td>{{ config.measurements.length }} measurements</td>
+                    <td>{{ config.customProperties.length }} properties</td>
+                    <td>{{ config.fabricOptions.length }} fabrics</td>
+                    <td>
+                      <span class="status" [class.active]="config.isActive">
+                        {{ config.isActive ? 'Active' : 'Inactive' }}
+                      </span>
+                    </td>
+                    <td>
+                      <button 
+                        class="toggle-btn" 
+                        (click)="toggleConfigActive(config)"
+                        [class.active]="config.isActive"
+                      >
+                        {{ config.isActive ? 'Deactivate' : 'Activate' }}
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>

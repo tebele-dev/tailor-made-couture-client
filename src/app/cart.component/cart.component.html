@@ -1,22 +1,53 @@
-<div class="min-h-screen bg-background">
-  
-    <div class="container mx-auto px-4 py-12">
+<div class="cart__container" role="main">
+    <div class="cart__wrapper mx-auto px-4 py-12">
       <div class="max-w-4xl mx-auto">
-        <h1 class="page-title animate-fade-in-up">Shopping Cart</h1>
-  
-        <!-- Empty cart state -->
-        <div class="card animate-fade-in">
-          <div class="card-content empty-cart">
-            <lucide-icon [name]="shoppingBagIcon" class="empty-cart-icon"></lucide-icon>
-            <h2 class="empty-cart-title">Your cart is empty</h2>
-            <p class="empty-cart-description">
-              Start shopping to add items to your cart
-            </p>
-            <a [routerLink]="['/products']" class="btn-primary">
-              Continue Shopping
-            </a>
+        <h1 class="cart__title cart__animate-fade-in-up">Shopping Cart</h1>
+
+        @if (cartItems().length === 0) {
+          <div class="cart__card cart__animate-fade-in">
+            <div class="cart__card-content cart__empty">
+              <lucide-icon [name]="shoppingBagIcon" class="cart__empty-icon" aria-hidden="true"></lucide-icon>
+              <h2 class="cart__empty-title">Your cart is empty</h2>
+              <p class="cart__empty-description">Start shopping to add items to your cart</p>
+              <a [routerLink]="['/products']" class="btn-outline" aria-label="Continue shopping">Continue Shopping</a>
+            </div>
           </div>
-        </div>
+        } @else {
+          <div class="cart__card cart__animate-fade-in" style="padding: 16px;">
+            <div class="cart__items">
+              @for (item of cartItems(); track item.product.id) {
+                <div class="cart__item" role="row">
+                  <img [src]="item.product.image" [alt]="item.product.name" class="cart__item-image" loading="lazy" />
+                  <div class="cart__item-info">
+                    <div class="cart__item-info-name">{{ item.product.name }}</div>
+                    <div class="cart__item-info-price">{{ item.product.price | currency }}</div>
+                  </div>
+                  <div class="cart__item-controls">
+                    <label for="quantity-{{ item.product.id }}" class="sr-only">Quantity for {{ item.product.name }}</label>
+                    <input 
+                      type="number" 
+                      id="quantity-{{ item.product.id }}"
+                      min="1" 
+                      [ngModel]="item.quantity" 
+                      (ngModelChange)="updateQty(item.product.id, $event)" 
+                      class="cart__quantity-input"
+                      aria-label="Quantity for {{ item.product.name }}"
+                    />
+                    <button class="cart__remove-btn" (click)="remove(item.product.id)" aria-label="Remove {{ item.product.name }} from cart">Remove</button>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+          <div class="cart__total">
+            <div class="cart__total-label">Total</div>
+            <div class="cart__total-amount">{{ total() | currency }}</div>
+          </div>
+          <div class="cart__actions">
+            <a [routerLink]="['/products']" class="cart__continue-btn" aria-label="Continue shopping">Continue Shopping</a>
+            <a [routerLink]="['/checkout']" class="cart__checkout-btn" aria-label="Proceed to checkout">Proceed to Checkout</a>
+          </div>
+        }
       </div>
     </div>
   </div>

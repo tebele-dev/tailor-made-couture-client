@@ -1,89 +1,238 @@
-<nav class="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
-    <div class="container mx-auto px-4">
-      <div class="flex items-center justify-between h-16">
-        <!-- Logo -->
-        <a [routerLink]="['/']" class="flex items-center gap-2 group">
-          <lucide-icon [name]="scissorsIcon" class="h-6 w-6 text-accent transition-transform group-hover:rotate-12"></lucide-icon>
-          <span class="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            TailorMade Couture
-          </span>
-        </a>
-  
-        <!-- Desktop Navigation -->
-        <div class="hidden md:flex items-center gap-8">
-          <a [routerLink]="['/']" class="text-foreground hover:text-accent transition-colors">
+<nav class="header__nav sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border" role="navigation" aria-label="Main navigation">
+  <div class="header__container container mx-auto px-4">
+    <div class="header__flex header__items-center header__justify-between header__h-16">
+      <!-- Logo -->
+      <a [routerLink]="['/home']" class="header__logo" aria-label="TailorMade Couture Home">
+        <lucide-icon [name]="scissorsIcon" class="header__logo-icon" aria-hidden="true"></lucide-icon>
+        <span class="header__logo-text">
+          TailorMade Couture
+        </span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <div class="header__desktop-nav header__items-center header__gap-8">
+        @if (isAuthenticated()) {
+          @if (user()?.role === 'admin') {
+            <a [routerLink]="['/admin']" class="header__nav-link" aria-current="page">
+              Dashboard
+            </a>
+          } @else {
+            <a [routerLink]="['/home']" class="header__nav-link" aria-current="page">
+              Dashboard
+            </a>
+          }
+        } @else {
+          <a [routerLink]="['/home']" class="header__nav-link">
             Home
           </a>
-          <a [routerLink]="['/products']" class="text-foreground hover:text-accent transition-colors">
+        }
+        @if (!isAuthenticated() || user()?.role !== 'admin') {
+          <a [routerLink]="['/products']" class="header__nav-link">
             Shop
           </a>
-          <a [routerLink]="['/custom-design']" class="text-foreground hover:text-accent transition-colors">
+          <a [routerLink]="['/custom-design']" class="header__nav-link">
             Custom Design
           </a>
-          <a [routerLink]="['/about']" class="text-foreground hover:text-accent transition-colors">
-            About
+        }
+        
+        <!-- Admin Navigation Items -->
+        @if (isAuthenticated() && user()?.role === 'admin') {
+          <!-- Moved these links to the dropdown menu above
+          <a [routerLink]="['/inventory']" class="header__nav-link">
+            Inventory
           </a>
-        </div>
-  
-        <!-- Cart & Mobile Menu -->
-        <div class="flex items-center gap-4">
-          <a [routerLink]="['/cart']">
-            <button type="button" class="relative p-2 text-foreground hover:text-accent transition-colors">
-              <lucide-icon [name]="shoppingCartIcon" class="h-5 w-5"></lucide-icon>
-              <span class="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-accent text-accent-foreground text-xs flex items-center justify-center">
-                0
-              </span>
-            </button>
-          </a>
-  
-          <!-- Mobile Menu Button -->
-          <button
-            type="button"
-            (click)="toggleMobileMenu()"
-            class="md:hidden"
-          >
-            <lucide-icon 
-              [name]="mobileMenuIcon" 
-              class="h-6 w-6"
-            ></lucide-icon>
-          </button>
-        </div>
+          -->
+        }
+        
+        <a [routerLink]="['/everyview']" class="header__nav-link">
+          Everyview
+        </a>
+        <a [routerLink]="['/about']" class="header__nav-link">
+          About
+        </a>
       </div>
-  
-      <!-- Mobile Menu -->
-      @if (mobileMenuOpen) {
-        <div class="md:hidden py-4 border-t border-border animate-fade-in">
-          <div class="flex flex-col gap-4">
+
+      <!-- Cart & User Menu -->
+      <div class="header__flex header__items-center header__gap-4">
+        @if (!isAuthenticated() || user()?.role !== 'admin') {
+          <a [routerLink]="['/cart']" class="header__cart" aria-label="Shopping Cart">
+            <lucide-icon [name]="shoppingCartIcon" class="h-5 w-5" aria-hidden="true"></lucide-icon>
+            @if (cartCount() > 0) {
+              <span class="header__cart-count" aria-label="{{ cartCount() }} items in cart">
+                {{ cartCount() }}
+              </span>
+            }
+          </a>
+        }
+
+        @if (!isAuthenticated()) {
+          <div class="header__desktop-nav header__items-center header__gap-3">
+            <a [routerLink]="['/login']" class="header__nav-link">Login</a>
+            <a [routerLink]="['/signup']" class="header__btn-primary" aria-label="Sign Up">Sign Up</a>
+          </div>
+        } @else {
+          <!-- User dropdown for desktop -->
+          <div class="header__desktop-nav header__items-center header__gap-3">
+            <div class="header__dropdown-container" (focus)="toggleUserMenuOnFocus()" (blur)="closeUserMenuOnBlur()" tabindex="0">
+              <button class="header__dropdown-button" (click)="toggleUserMenu()" aria-haspopup="true" aria-expanded="userMenuOpen" aria-label="User menu">
+                <span class="font-medium">Hi, {{ user()?.name }}</span>
+                @if (user()?.role === 'admin') {
+                  <span class="header__role-badge">Admin</span>
+                }
+                <lucide-icon [name]="chevronDownIcon" class="h-4 w-4" aria-hidden="true"></lucide-icon>
+              </button>
+              <div class="header__dropdown-menu"
+                   [class.opacity-100]="userMenuOpen" [class.visible]="userMenuOpen"
+                   [class.opacity-0]="!userMenuOpen" [class.invisible]="!userMenuOpen" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button">
+                <div class="header__dropdown-content">
+                  <div class="flex flex-col gap-1">
+                    <a [routerLink]="['/address-book']" class="header__dropdown-item" role="menuitem">Address Book</a>
+                    <a [routerLink]="['/account']" class="header__dropdown-item" role="menuitem">My Account</a>
+                    <a [routerLink]="['/orders']" class="header__dropdown-item" role="menuitem">Orders</a>
+                  </div>
+                  
+                  <!-- Admin Links -->
+                  @if (user()?.role === 'admin') {
+                    <div class="header__dropdown-divider"></div>
+                    <div class="header__admin-links flex flex-col gap-1">
+                      <a [routerLink]="['/admin-design']" class="header__dropdown-item" role="menuitem">Design Config</a>
+                      <a [routerLink]="['/fabric']" class="header__dropdown-item" role="menuitem">Fabric Manager</a>
+                      <a [routerLink]="['/inventory']" class="header__dropdown-item" role="menuitem">Manage Inventory</a>
+                    </div>
+                  }
+                  
+                  <div class="header__dropdown-divider"></div>
+                  <button (click)="logoutAndGoHome(); closeUserMenu()" class="header__dropdown-item header__dropdown-logout" role="menuitem">Logout</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Mobile Menu Button -->
+        <button
+          type="button"
+          (click)="toggleMobileMenu()"
+          class="md:hidden"
+          aria-label="Toggle mobile menu"
+          aria-expanded="mobileMenuOpen"
+        >
+          <lucide-icon 
+            [name]="mobileMenuIcon" 
+            class="h-6 w-6"
+            aria-hidden="true"
+          ></lucide-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    @if (mobileMenuOpen) {
+      <div class="header__mobile-menu md:hidden py-4 border-t border-border animate-fade-in" role="menubar">
+        <div class="flex flex-col gap-4">
+          @if (isAuthenticated()) {
+            @if (user()?.role === 'admin') {
+              <a
+                [routerLink]="['/admin']"
+                class="header__mobile-nav-item"
+                (click)="closeMobileMenu()"
+                role="menuitem"
+              >
+                Dashboard
+              </a>
+            } @else {
+              <a
+                [routerLink]="['/home']"
+                class="header__mobile-nav-item"
+                (click)="closeMobileMenu()"
+                role="menuitem"
+              >
+                Dashboard
+              </a>
+            }
+          } @else {
             <a
-              [routerLink]="['/']"
-              class="text-foreground hover:text-accent transition-colors"
+              [routerLink]="['/home']"
+              class="header__mobile-nav-item"
               (click)="closeMobileMenu()"
+              role="menuitem"
             >
               Home
             </a>
+          }
+          @if (!isAuthenticated() || user()?.role !== 'admin') {
             <a
               [routerLink]="['/products']"
-              class="text-foreground hover:text-accent transition-colors"
+              class="header__mobile-nav-item"
               (click)="closeMobileMenu()"
+              role="menuitem"
             >
               Shop
             </a>
             <a
               [routerLink]="['/custom-design']"
-              class="text-foreground hover:text-accent transition-colors"
+              class="header__mobile-nav-item"
               (click)="closeMobileMenu()"
+              role="menuitem"
             >
               Custom Design
             </a>
-            <a
-              [routerLink]="['/about']"
-              class="text-foreground hover:text-accent transition-colors"
-              (click)="closeMobileMenu()"
-            >
-              About
-            </a>
-          </div>
+          }
+          
+          <!-- Admin links moved to user dropdown -->
+          
+          <a
+            [routerLink]="['/everyview']"
+            class="header__mobile-nav-item"
+            (click)="closeMobileMenu()"
+            role="menuitem"
+          >
+            Everyview
+          </a>
+          <a
+            [routerLink]="['/about']"
+            class="header__mobile-nav-item"
+            (click)="closeMobileMenu()"
+            role="menuitem"
+          >
+            About
+          </a>
+          
+          @if (!isAuthenticated()) {
+            <div class="header__mobile-user-section">
+              <a [routerLink]="['/login']" class="header__mobile-nav-item" (click)="closeMobileMenu()" role="menuitem">Login</a>
+              <a [routerLink]="['/signup']" class="header__btn-primary w-full text-center" (click)="closeMobileMenu()" role="menuitem">Sign Up</a>
+            </div>
+          } @else {
+            <div class="header__mobile-user-section">
+              <div class="header__mobile-user-greeting">
+                <span class="font-medium">Hi, {{ user()?.name }}</span>
+                @if (user()?.role === 'admin') {
+                  <span class="header__role-badge">Admin</span>
+                }
+              </div>
+              <div class="header__mobile-user-links">
+                <a [routerLink]="['/address-book']" class="header__mobile-nav-item" (click)="closeMobileMenu()" role="menuitem">Address Book</a>
+                <a [routerLink]="['/account']" class="header__mobile-nav-item" (click)="closeMobileMenu()" role="menuitem">My Account</a>
+                <a [routerLink]="['/orders']" class="header__mobile-nav-item" (click)="closeMobileMenu()" role="menuitem">Orders</a>
+              </div>
+              
+              <!-- Admin Mobile Links -->
+              @if (user()?.role === 'admin') {
+                <div class="header__mobile-admin-links">
+                  <a [routerLink]="['/admin-design']" class="header__mobile-nav-item" (click)="closeMobileMenu()" role="menuitem">Design Config</a>
+                  <a [routerLink]="['/fabric']" class="header__mobile-nav-item" (click)="closeMobileMenu()" role="menuitem">Fabric Manager</a>
+                  <a [routerLink]="['/inventory']" class="header__mobile-nav-item" (click)="closeMobileMenu()" role="menuitem">Manage Inventory</a>
+                </div>
+              }
+              
+              <div class="header__mobile-logout">
+                <button (click)="logoutAndGoHome()" class="btn-outline w-full text-center" role="menuitem">Logout</button>
+              </div>
+            </div>
+          }
         </div>
-      }
-    </div>
-  </nav>
+      </div>
+    }
+  </div>
+</nav>

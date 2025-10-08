@@ -1,14 +1,14 @@
 <div class="min-h-screen bg-background">
   <div class="container mx-auto px-4 py-12">
     <div class="mb-8 animate-fade-in-up">
-      <h1 class="page-title">Our Collection</h1>
-      <p class="page-description">
-        Discover premium ready-to-wear pieces and custom tailoring options
+      <h1 class="products__title">Our Collection</h1>
+      <p class="products__description">
+        Discover our premium ready-to-wear pieces and custom tailoring options
       </p>
     </div>
 
-    <div class="products-controls">
-      <div class="tabs-container">
+    <div class="products__controls">
+      <div class="products__tabs-container">
         <div class="tabs-list">
           <button 
             class="tab-trigger" 
@@ -34,7 +34,7 @@
         </div>
       </div>
 
-      <div class="sort-control">
+      <div class="products__sort-control">
         <label for="sort-select" class="sort-label">Sort by:</label>
         <select 
           id="sort-select"
@@ -50,8 +50,21 @@
       </div>
     </div>
 
-    <div class="products-grid">
-      @for (product of products; track product.id; let index = $index) {
+    <!-- Product type explanations -->
+    @if (activeTab === 'ready') {
+      <div class="products__type-info">
+        <h3>Ready to Wear</h3>
+        <p>Finished garments available for immediate purchase. These products are already made and ready to ship.</p>
+      </div>
+    } @else if (activeTab === 'custom') {
+      <div class="products__type-info">
+        <h3>Custom Design</h3>
+        <p>Create your perfect garment with our custom design service. Each product is a blueprint that can be tailored to your exact specifications.</p>
+      </div>
+    }
+
+    <div class="products__grid">
+      @for (product of filteredProducts; track product.id; let index = $index) {
         <div class="product-item" [style.animation-delay]="index * 0.1 + 's'">
           <app-product-card [product]="product"></app-product-card>
         </div>

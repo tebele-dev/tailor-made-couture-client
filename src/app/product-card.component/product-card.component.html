@@ -1,24 +1,44 @@
-<div class="product-card">
-    <div class="product-image-container">
-      <img [src]="product.image" [alt]="product.name" class="product-image" />
-      @if (product.isCustom) {
-        <div class="custom-badge">Custom</div>
-      }
+<article class="product-card" role="article" [attr.aria-labelledby]="'product-name-' + product.id">
+  <div class="product-image-container">
+    <img 
+      [src]="product.image" 
+      [alt]="product.name" 
+      class="product-image"
+      loading="lazy"
+    />
+    @if (product.isCustom) {
+      <span class="custom-badge" aria-label="Custom Blueprint">Custom Blueprint</span>
+    } @else {
+      <span class="ready-badge" aria-label="Ready to Wear">Ready to Wear</span>
+    }
+  </div>
+  
+  <div class="product-info">
+    <div class="product-category">{{ product.category }}</div>
+    <h3 class="product-name" [id]="'product-name-' + product.id">{{ product.name }}</h3>
+    
+    <div class="product-rating" aria-label="{{product.rating}} out of 5 stars">
+      <div class="stars">
+        @for (star of getStars(product.rating); track $index) {
+          <span class="star" [class.filled]="star === 1" aria-hidden="true">★</span>
+        }
+      </div>
+      <span class="rating-value">{{ product.rating }}</span>
     </div>
     
-    <div class="product-info">
-      <div class="product-category">{{ product.category }}</div>
-      <h3 class="product-name">{{ product.name }}</h3>
-      
-      <div class="product-rating">
-        <div class="stars">
-          @for (star of getStars(product.rating); track $index) {
-            <span class="star" [class.filled]="star === 1">★</span>
-          }
-        </div>
-        <span class="rating-value">{{ product.rating }}</span>
-      </div>
-      
-      <div class="product-price">${{ product.price }}</div>
-    </div>
+    <div class="product-price">{{ product.price | currency }}</div>
+    
+    @if (product.isCustom) {
+      <p class="product-description">Customize this blueprint to create your perfect garment</p>
+    } @else {
+      <p class="product-description">Ready-made garment available for immediate purchase</p>
+    }
   </div>
+  
+  <a 
+    [routerLink]="product.isCustom ? ['/custom-design'] : ['/products', product.id]"
+    [queryParams]="product.isCustom ? { productId: product.id } : null"
+    class="card-link"
+    [attr.aria-label]="'View details for ' + product.name"
+  ></a>
+</article>

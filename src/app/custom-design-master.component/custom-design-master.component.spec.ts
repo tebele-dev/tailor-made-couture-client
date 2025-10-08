@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CustomDesignMasterComponent } from './custom-design-master.component';
+import { CustomDesignComponent } from './custom-design-master.component';
 
-describe('CustomDesignMasterComponent', () => {
-  let component: CustomDesignMasterComponent;
-  let fixture: ComponentFixture<CustomDesignMasterComponent>;
+describe('CustomDesignComponent', () => {
+  let component: CustomDesignComponent;
+  let fixture: ComponentFixture<CustomDesignComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CustomDesignMasterComponent]
+      imports: [CustomDesignComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CustomDesignMasterComponent);
+    fixture = TestBed.createComponent(CustomDesignComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

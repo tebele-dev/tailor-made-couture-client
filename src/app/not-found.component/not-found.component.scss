@@ -1,36 +1,38 @@
-.not-found-container {
+.not-found {
+  &__container {
     display: flex;
     min-height: 100vh;
     align-items: center;
     justify-content: center;
     background-color: hsl(var(--secondary));
   }
-  
-  .not-found-content {
+
+  &__content {
     text-align: center;
   }
-  
-  .error-code {
+
+  &__error-code {
     font-size: 4rem;
     font-weight: 700;
     margin-bottom: 1rem;
     color: hsl(var(--foreground));
   }
-  
-  .error-message {
+
+  &__error-message {
     font-size: 1.5rem;
     color: hsl(var(--muted-foreground));
     margin-bottom: 2rem;
   }
-  
-  .home-link {
+
+  &__home-link {
     color: hsl(var(--accent));
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s ease;
+
+    &:hover {
+      color: hsl(var(--accent) / 0.8);
+      text-decoration: underline;
+    }
   }
-  
-  .home-link:hover {
-    color: hsl(var(--accent) / 0.8);
-    text-decoration: underline;
-  }
+}

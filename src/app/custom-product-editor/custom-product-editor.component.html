@@ -1,0 +1,269 @@
+<div class="custom-product-editor">
+  <h2>Customize Your {{ product.name }}</h2>
+  
+  <form (ngSubmit)="onSubmit()" #customForm="ngForm">
+    <!-- Measurements Section -->
+    @if (isAnyPropertyInCategory('measurements')) {
+      <div class="editor-section">
+        <h3>Measurements</h3>
+        <div class="properties-grid">
+          @for (prop of getPropertyByCategory('measurements'); track prop.id) {
+            <div class="property-item">
+              <label [for]="'prop_' + prop.id">{{ prop.name }} 
+                @if (prop.required) {
+                  <span class="required">*</span>
+                }
+              </label>
+              
+              @switch (prop.type) {
+                @case ('text') {
+                  <input 
+                    [id]="'prop_' + prop.id"
+                    type="text" 
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    [required]="prop.required"
+                    class="form-input"
+                  />
+                }
+                @case ('number') {
+                  <input 
+                    [id]="'prop_' + prop.id"
+                    type="number" 
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    [required]="prop.required"
+                    class="form-input"
+                    min="0"
+                    step="0.1"
+                  />
+                }
+                @case ('selection') {
+                  <select 
+                    [id]="'prop_' + prop.id"
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    [required]="prop.required"
+                    class="form-input"
+                  >
+                    @for (option of prop.options; track option) {
+                      <option [value]="option">{{ option }}</option>
+                    }
+                  </select>
+                }
+                @case ('boolean') {
+                  <input 
+                    [id]="'prop_' + prop.id"
+                    type="checkbox" 
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    class="form-checkbox"
+                  />
+                }
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+    
+    <!-- Design Section -->
+    @if (isAnyPropertyInCategory('design')) {
+      <div class="editor-section">
+        <h3>Design Options</h3>
+        <div class="properties-grid">
+          @for (prop of getPropertyByCategory('design'); track prop.id) {
+            <div class="property-item">
+              <label [for]="'prop_' + prop.id">{{ prop.name }}
+                @if (prop.required) {
+                  <span class="required">*</span>
+                }
+              </label>
+              
+              @switch (prop.type) {
+                @case ('text') {
+                  <input 
+                    [id]="'prop_' + prop.id"
+                    type="text" 
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    [required]="prop.required"
+                    class="form-input"
+                  />
+                }
+                @case ('number') {
+                  <input 
+                    [id]="'prop_' + prop.id"
+                    type="number" 
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    [required]="prop.required"
+                    class="form-input"
+                    min="0"
+                    step="0.1"
+                  />
+                }
+                @case ('selection') {
+                  <select 
+                    [id]="'prop_' + prop.id"
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    [required]="prop.required"
+                    class="form-input"
+                  >
+                    @for (option of prop.options; track option) {
+                      <option [value]="option">{{ option }}</option>
+                    }
+                  </select>
+                }
+                @case ('boolean') {
+                  <input 
+                    [id]="'prop_' + prop.id"
+                    type="checkbox" 
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    class="form-checkbox"
+                  />
+                }
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+    
+    <!-- Fabric Section -->
+    @if (isAnyPropertyInCategory('fabric')) {
+      <div class="editor-section">
+        <h3>Fabric Options</h3>
+        <div class="properties-grid">
+          @for (prop of getPropertyByCategory('fabric'); track prop.id) {
+            <div class="property-item">
+              <label [for]="'prop_' + prop.id">{{ prop.name }}
+                @if (prop.required) {
+                  <span class="required">*</span>
+                }
+              </label>
+              
+              @switch (prop.type) {
+                @case ('text') {
+                  <input 
+                    [id]="'prop_' + prop.id"
+                    type="text" 
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    [required]="prop.required"
+                    class="form-input"
+                  />
+                }
+                @case ('number') {
+                  <input 
+                    [id]="'prop_' + prop.id"
+                    type="number" 
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    [required]="prop.required"
+                    class="form-input"
+                    min="0"
+                    step="0.1"
+                  />
+                }
+                @case ('selection') {
+                  <select 
+                    [id]="'prop_' + prop.id"
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    [required]="prop.required"
+                    class="form-input"
+                  >
+                    @for (option of prop.options; track option) {
+                      <option [value]="option">{{ option }}</option>
+                    }
+                  </select>
+                }
+                @case ('boolean') {
+                  <input 
+                    [id]="'prop_' + prop.id"
+                    type="checkbox" 
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    class="form-checkbox"
+                  />
+                }
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+    
+    <!-- Other Section -->
+    @if (isAnyPropertyInCategory('other')) {
+      <div class="editor-section">
+        <h3>Additional Options</h3>
+        <div class="properties-grid">
+          @for (prop of getPropertyByCategory('other'); track prop.id) {
+            <div class="property-item">
+              <label [for]="'prop_' + prop.id">{{ prop.name }}
+                @if (prop.required) {
+                  <span class="required">*</span>
+                }
+              </label>
+              
+              @switch (prop.type) {
+                @case ('text') {
+                  <input 
+                    [id]="'prop_' + prop.id"
+                    type="text" 
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    [required]="prop.required"
+                    class="form-input"
+                  />
+                }
+                @case ('number') {
+                  <input 
+                    [id]="'prop_' + prop.id"
+                    type="number" 
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    [required]="prop.required"
+                    class="form-input"
+                    min="0"
+                    step="0.1"
+                  />
+                }
+                @case ('selection') {
+                  <select 
+                    [id]="'prop_' + prop.id"
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    [required]="prop.required"
+                    class="form-input"
+                  >
+                    @for (option of prop.options; track option) {
+                      <option [value]="option">{{ option }}</option>
+                    }
+                  </select>
+                }
+                @case ('boolean') {
+                  <input 
+                    [id]="'prop_' + prop.id"
+                    type="checkbox" 
+                    [(ngModel)]="editableProperties[prop.id]" 
+                    [name]="'prop_' + prop.id"
+                    class="form-checkbox"
+                  />
+                }
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+    
+    <div class="actions">
+      <button type="submit" class="btn-primary">Save Customization</button>
+    </div>
+  </form>
+</div>

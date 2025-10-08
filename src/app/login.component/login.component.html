@@ -1,0 +1,42 @@
+<section class="container mx-auto px-4 py-12" role="main">
+  <div class="login__card card">
+    <h1 class="login__title page-title">Login</h1>
+    @if (error) { <div class="login__error" role="alert">{{ error }}</div> }
+    <form (ngSubmit)="onSubmit()" class="login__form" role="form" aria-label="Login form">
+      <div class="login__form-group">
+        <label class="login__label">
+          Email
+          <input 
+            [(ngModel)]="email" 
+            name="email" 
+            type="email" 
+            required 
+            class="login__input" 
+            aria-required="true"
+            autocomplete="email"
+          />
+        </label>
+      </div>
+      <div class="login__form-group">
+        <label class="login__label">
+          Password
+          <input 
+            [(ngModel)]="password" 
+            name="password" 
+            type="password" 
+            required 
+            class="login__input" 
+            aria-required="true"
+            autocomplete="current-password"
+          />
+        </label>
+      </div>
+      <button type="submit" class="login__submit-btn" aria-label="Sign in">Sign in</button>
+    </form>
+    
+    <div class="login__signup-link">
+      <span>Don't have an account? </span>
+      <a [routerLink]="['/signup']" class="login__signup-link-anchor" aria-label="Sign up for an account">Sign up</a>
+    </div>
+  </div>
+</section>

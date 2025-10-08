@@ -1,0 +1,92 @@
+<section class="signup__container" role="main">
+  <div class="signup__card">
+    <div class="signup__header">
+      <h1 class="signup__title">Create Account</h1>
+      <p class="signup__subtitle">Join TailorMade Couture for exclusive access</p>
+    </div>
+
+    @if (success) {
+      <div class="signup__success-message" role="alert">
+        <h2>Account Created Successfully!</h2>
+        <p>Redirecting to homepage...</p>
+      </div>
+    } @else {
+      <form (ngSubmit)="onSubmit()" class="signup__form" role="form" aria-label="Sign up form">
+        @if (error) {
+          <div class="signup__error-message" role="alert">
+            {{ error }}
+          </div>
+        }
+
+        <div class="signup__form-group">
+          <label for="name" class="signup__form-label">Full Name</label>
+          <input 
+            id="name"
+            [(ngModel)]="name" 
+            name="name" 
+            type="text" 
+            required 
+            class="signup__form-input"
+            placeholder="Enter your full name"
+            aria-required="true"
+            autocomplete="name"
+          />
+        </div>
+
+        <div class="signup__form-group">
+          <label for="email" class="signup__form-label">Email Address</label>
+          <input 
+            id="email"
+            [(ngModel)]="email" 
+            name="email" 
+            type="email" 
+            required 
+            class="signup__form-input"
+            placeholder="Enter your email"
+            aria-required="true"
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="signup__form-group">
+          <label for="password" class="signup__form-label">Password</label>
+          <input 
+            id="password"
+            [(ngModel)]="password" 
+            name="password" 
+            type="password" 
+            required 
+            class="signup__form-input"
+            placeholder="Create a password"
+            aria-required="true"
+            autocomplete="new-password"
+          />
+        </div>
+
+        <div class="signup__form-group">
+          <label for="confirmPassword" class="signup__form-label">Confirm Password</label>
+          <input 
+            id="confirmPassword"
+            [(ngModel)]="confirmPassword" 
+            name="confirmPassword" 
+            type="password" 
+            required 
+            class="signup__form-input"
+            placeholder="Confirm your password"
+            aria-required="true"
+            autocomplete="new-password"
+          />
+        </div>
+
+        <button type="submit" class="signup__button" [disabled]="!name || !email || !password || !confirmPassword" aria-label="Create account">
+          Create Account
+        </button>
+
+        <div class="signup__login-link">
+          <span>Already have an account? </span>
+          <a [routerLink]="['/login']" class="signup__login-link-anchor" aria-label="Sign in to existing account">Sign in</a>
+        </div>
+      </form>
+    }
+  </div>
+</section>

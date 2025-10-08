@@ -4,7 +4,7 @@
         <div class="text-center mb-12 animate-fade-in-up">
           <h1 class="page-title">Custom Design Studio</h1>
           <p class="page-description">
-            Create your perfect garment in four simple steps
+            Create your perfect garment from our blueprint collection
           </p>
         </div>
   
@@ -27,9 +27,9 @@
           <div class="animate-fade-in">
             <div class="card">
               <div class="card-header">
-                <h2 class="card-title">Choose Your Garment</h2>
+                <h2 class="card-title">Choose Your Blueprint</h2>
                 <p class="card-description">
-                  Select the type of garment you'd like to customize
+                  Select the type of garment blueprint you'd like to customize
                 </p>
               </div>
               <div class="card-content">
@@ -76,27 +76,33 @@
         }
   
         <!-- Step 2: Measurements -->
-        @if (step === 2) {
+        @if (step === 2 && selectedProduct) {
           <div class="animate-fade-in">
             <div class="card">
-              <div class="card-header">
+              <div class="card-header compact">
                 <h2 class="card-title">Enter Your Measurements</h2>
                 <p class="card-description">
-                  Provide your measurements or upload a reference photo
+                  Provide your measurements for {{ selectedProduct.name }}
                 </p>
               </div>
-              <div class="card-content">
-                <div class="tabs-container">
-                  <div class="tabs-list">
+              
+              <!-- Product Image Preview - Hidden on mobile for compact view -->
+              <div class="product-preview compact" *ngIf="selectedProduct.images && selectedProduct.images.length > 0">
+                <img [src]="selectedProduct.images[0]" [alt]="selectedProduct.name" class="product-image-preview">
+              </div>
+              
+              <div class="card-content compact">
+                <div class="tabs-container compact">
+                  <div class="tabs-list compact">
                     <button 
-                      class="tab-trigger" 
+                      class="tab-trigger compact" 
                       [class.active]="activeTab === 'manual'"
                       (click)="setActiveTab('manual')"
                     >
                       Manual Entry
                     </button>
                     <button 
-                      class="tab-trigger" 
+                      class="tab-trigger compact" 
                       [class.active]="activeTab === 'profile'"
                       (click)="setActiveTab('profile')"
                     >
@@ -105,18 +111,19 @@
                   </div>
                   
                   @if (activeTab === 'manual') {
-                    <div class="tab-content">
-                      <div class="measurements-grid">
+                    <div class="tab-content compact">
+                      <div class="measurements-grid compact">
                         @for (measurement of measurements; track measurement) {
-                          <div class="measurement-field">
+                          <div class="measurement-field compact">
                             <label class="field-label">{{ measurement }}</label>
                             <div class="field-input-group">
                               <input
                                 type="number"
                                 placeholder="0"
                                 class="number-input"
+                                [(ngModel)]="measurementValues[measurement]"
                               />
-                              <span class="input-suffix">inches</span>
+                              <span class="input-suffix">in</span>
                             </div>
                           </div>
                         }
@@ -125,24 +132,24 @@
                   }
                   
                   @if (activeTab === 'profile') {
-                    <div class="tab-content">
-                      <p class="empty-profile-message">
+                    <div class="tab-content compact">
+                      <p class="empty-profile-message compact">
                         No saved measurement profiles yet. Complete your first order to save your measurements.
                       </p>
                     </div>
                   }
                 </div>
-  
-                <div class="step-actions between">
-                  <button type="button" class="btn-outline" (click)="prevStep()">
+
+                <div class="step-actions compact between">
+                  <button type="button" class="btn-outline compact" (click)="prevStep()">
                     Back
                   </button>
                   <button
                     type="button"
-                    class="btn-primary"
+                    class="btn-primary compact"
                     (click)="nextStep()"
                   >
-                    Continue to Fabric Selection
+                    Continue
                     <lucide-icon [name]="arrowRightIcon" class="btn-icon"></lucide-icon>
                   </button>
                 </div>
@@ -151,15 +158,203 @@
           </div>
         }
   
-        <!-- Placeholder for steps 3 and 4 -->
-        @if (step > 2) {
-          <div class="placeholder-step animate-fade-in">
-            <p class="placeholder-text">
-              Steps 3 and 4 (Fabric Selection & Review) coming soon!
-            </p>
-            <button type="button" class="btn-outline" (click)="step = 1">
-              Start Over
-            </button>
+        <!-- Step 3: Fabric Selection -->
+        @if (step === 3 && selectedProduct) {
+          <div class="animate-fade-in">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Select Fabrics for {{ selectedProduct.name }}</h2>
+                <p class="card-description">
+                  Choose the fabrics for your custom garment
+                </p>
+              </div>
+              
+              <!-- Product Image Preview -->
+              <div class="product-preview" *ngIf="selectedProduct.images && selectedProduct.images.length > 0">
+                <img [src]="selectedProduct.images[0]" [alt]="selectedProduct.name" class="product-image-preview">
+              </div>
+              
+              <div class="card-content">
+                <div class="fabric-selection-content">
+                  <div class="price-summary">
+                    <div class="price-row">
+                      <span>Base Price:</span>
+                      <span>{{ selectedProduct.price | currency }}</span>
+                    </div>
+                    @for (category of fabricCategories; track category.name) {
+                      @if (getSelectedFabric(category.name)) {
+                        <div class="price-row fabric-modifier">
+                          <span>{{ getSelectedFabric(category.name)?.name }}:</span>
+                          <span>
+                            @if (getSelectedFabric(category.name)?.priceModifier! > 0) {
+                              (+{{ getSelectedFabric(category.name)?.priceModifier }}%)
+                            } @else if (getSelectedFabric(category.name)?.priceModifier! < 0) {
+                              ({{ getSelectedFabric(category.name)?.priceModifier }}%)
+                            } @else {
+                              (No change)
+                            }
+                          </span>
+                        </div>
+                      }
+                    }
+                    <div class="price-row total">
+                      <span>Total:</span>
+                      <span>{{ calculateTotalPrice() | currency }}</span>
+                    </div>
+                  </div>
+                  
+                  <div class="fabric-categories">
+                    @for (category of fabricCategories; track category.name) {
+                      <div class="fabric-category">
+                        <h3>{{ category.name }}</h3>
+                        <div class="fabric-options">
+                          @for (fabric of category.options; track fabric.id) {
+                            <div 
+                              class="fabric-option" 
+                              [class.selected]="getSelectedFabric(category.name)?.id === fabric.id"
+                              (click)="selectFabric(category.name, fabric)"
+                            >
+                              <div class="fabric-swatch" [style.background-color]="fabric.swatchColor"></div>
+                              <div class="fabric-details">
+                                <h4>{{ fabric.name }}</h4>
+                                <p class="fabric-description">{{ fabric.description }}</p>
+                                <div class="fabric-price">
+                                  @if (fabric.priceModifier > 0) {
+                                    <span class="price-increase">+{{ fabric.priceModifier }}%</span>
+                                  } @else if (fabric.priceModifier < 0) {
+                                    <span class="price-decrease">{{ fabric.priceModifier }}%</span>
+                                  } @else {
+                                    <span class="price-neutral">No change</span>
+                                  }
+                                </div>
+                              </div>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+  
+                <div class="step-actions between">
+                  <button type="button" class="btn-outline" (click)="prevStep()">
+                    Back to Measurements
+                  </button>
+                  <button
+                    type="button"
+                    class="btn-primary"
+                    (click)="nextStep()"
+                  >
+                    Continue to Review
+                    <lucide-icon [name]="arrowRightIcon" class="btn-icon"></lucide-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+  
+        <!-- Step 4: Review -->
+        @if (step === 4 && selectedProduct) {
+          <div class="animate-fade-in">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">Review Your Custom Design</h2>
+                <p class="card-description">
+                  Review your selections before adding to cart
+                </p>
+              </div>
+              
+              <!-- Product Image Preview -->
+              <div class="product-preview" *ngIf="selectedProduct.images && selectedProduct.images.length > 0">
+                <img [src]="selectedProduct.images[0]" [alt]="selectedProduct.name" class="product-image-preview">
+              </div>
+              
+              <div class="card-content">
+                <div class="review-content">
+                  <div class="review-section">
+                    <h3>Product Details</h3>
+                    <div class="product-info">
+                      <p><strong>Name:</strong> {{ selectedProduct.name }}</p>
+                      <p><strong>Category:</strong> {{ selectedProduct.category }}</p>
+                      <p><strong>Base Price:</strong> {{ selectedProduct.price | currency }}</p>
+                    </div>
+                  </div>
+                  
+                  <div class="review-section">
+                    <h3>Your Measurements</h3>
+                    <div class="measurements-summary">
+                      @for (measurement of measurements; track measurement) {
+                        <div class="measurement-item">
+                          <span>{{ measurement }}:</span>
+                          <span>{{ measurementValues[measurement] }} inches</span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                  
+                  @if (getSelectedFabricCount() > 0) {
+                    <div class="review-section">
+                      <h3>Selected Fabrics</h3>
+                      <div class="fabrics-summary">
+                        @for (category of fabricCategories; track category.name) {
+                          @if (getSelectedFabric(category.name)) {
+                            <div class="fabric-item">
+                              <span>{{ category.name }}:</span>
+                              <span>{{ getSelectedFabric(category.name)?.name }}</span>
+                            </div>
+                          }
+                        }
+                      </div>
+                    </div>
+                  }
+                  
+                  <div class="review-section">
+                    <h3>Order Summary</h3>
+                    <div class="price-summary">
+                      <div class="price-row">
+                        <span>Base Price:</span>
+                        <span>{{ selectedProduct.price | currency }}</span>
+                      </div>
+                      @for (category of fabricCategories; track category.name) {
+                        @if (getSelectedFabric(category.name)) {
+                          <div class="price-row fabric-modifier">
+                            <span>{{ getSelectedFabric(category.name)?.name }}:</span>
+                            <span>
+                              @if (getSelectedFabric(category.name)?.priceModifier! > 0) {
+                                (+{{ getSelectedFabric(category.name)?.priceModifier }}%)
+                              } @else if (getSelectedFabric(category.name)?.priceModifier! < 0) {
+                                ({{ getSelectedFabric(category.name)?.priceModifier }}%)
+                              } @else {
+                                (No change)
+                              }
+                            </span>
+                          </div>
+                        }
+                      }
+                      <div class="price-row total">
+                        <span><strong>Total:</strong></span>
+                        <span><strong>{{ calculateTotalPrice() | currency }}</strong></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="step-actions between">
+                  <button type="button" class="btn-outline" (click)="prevStep()">
+                    Back to Fabric Selection
+                  </button>
+                  <button
+                    type="button"
+                    class="btn-primary"
+                    (click)="addToCart()"
+                  >
+                    Add to Cart
+                    <lucide-icon [name]="arrowRightIcon" class="btn-icon"></lucide-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         }
       </div>

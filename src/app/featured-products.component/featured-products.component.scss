@@ -1,36 +1,122 @@
 .featured-products {
-    padding: 5rem 0;
+    padding: var(--space-12) 0;
+    
+    /* BEM modifiers */
+    &--compact {
+      padding: var(--space-8) 0;
+    }
+    
+    &--spacious {
+      padding: var(--space-16) 0;
+    }
   }
   
   .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 var(--space-3);
   }
   
   .section-header {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: var(--space-8);
     animation: fadeInUp 0.6s ease-out;
+    /* Ensure proper alignment */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    
+    /* BEM elements */
+    &__container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    
+    &__content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-1);
+    }
   }
   
   .section-title {
     font-size: 2.25rem;
     font-weight: 700;
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-2);
     color: hsl(var(--foreground));
+    /* Improve visual hierarchy */
+    line-height: var(--leading-tight);
+    
+    /* BEM modifiers */
+    &--large {
+      font-size: 2.75rem;
+    }
+    
+    &--medium {
+      font-size: 2rem;
+    }
+    
+    &--small {
+      font-size: 1.75rem;
+    }
+    
+    /* Visual hierarchy improvements */
+    &__heading {
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin-bottom: var(--space-2);
+      color: hsl(var(--foreground));
+      line-height: var(--leading-tight);
+    }
   }
   
   .section-description {
     font-size: 1.125rem;
     color: hsl(var(--muted-foreground));
+    /* Improve readability */
+    line-height: var(--leading-relaxed);
+    max-width: 600px;
+    
+    /* BEM modifiers */
+    &--large {
+      font-size: 1.25rem;
+    }
+    
+    &--small {
+      font-size: 1rem;
+    }
+    
+    /* Visual hierarchy improvements */
+    &__text {
+      font-size: 1.125rem;
+      color: hsl(var(--muted-foreground));
+      line-height: var(--leading-relaxed);
+      max-width: 600px;
+    }
   }
   
   .products-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+    /* Ensure proper alignment */
+    align-items: start;
+    
+    /* BEM modifiers */
+    &--compact {
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+    
+    &--spacious {
+      gap: var(--space-6);
+      margin-bottom: var(--space-7);
+    }
   }
   
   @media (min-width: 640px) {
@@ -47,35 +133,95 @@
   
   .product-item {
     animation: fadeInUp 0.6s ease-out both;
+    /* Ensure consistent height */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    
+    /* BEM modifiers */
+    &--featured {
+      animation-delay: 0.1s;
+    }
+    
+    &--standard {
+      animation-delay: 0.2s;
+    }
   }
   
   .section-footer {
     text-align: center;
+    margin-top: var(--space-6);
+    
+    /* BEM element */
+    &__container {
+      display: flex;
+      justify-content: center;
+      margin-top: var(--space-6);
+    }
   }
   
   .btn-outline {
     display: inline-flex;
     align-items: center;
-    padding: 0.75rem 1.5rem;
+    padding: var(--space-2) var(--space-4);
     font-size: 1.125rem;
     font-weight: 500;
     border: 2px solid hsl(var(--border));
-    border-radius: 0.5rem;
+    border-radius: var(--radius-md);
     color: hsl(var(--foreground));
     background: transparent;
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition: var(--transition-default);
+    /* Ensure proper alignment */
+    justify-content: center;
+    
+    /* BEM modifiers */
+    &--large {
+      padding: var(--space-3) var(--space-5);
+      font-size: 1.25rem;
+    }
+    
+    &--small {
+      padding: var(--space-1-5) var(--space-3);
+      font-size: 1rem;
+    }
+    
+    &--compact {
+      padding: var(--space-1) var(--space-2-5);
+      font-size: 0.9rem;
+    }
   }
   
   .btn-outline:hover {
     background-color: hsl(var(--secondary));
     transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    
+    /* BEM modifier */
+    &--active {
+      background-color: hsl(var(--secondary));
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
   }
   
   .btn-icon {
     height: 1.25rem;
     width: 1.25rem;
-    margin-left: 0.5rem;
+    margin-left: var(--space-1-5);
+    /* Ensure proper alignment */
+    flex-shrink: 0;
+    
+    /* BEM modifiers */
+    &--large {
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+    
+    &--small {
+      height: 1rem;
+      width: 1rem;
+    }
   }
   
   @keyframes fadeInUp {

@@ -1,0 +1,334 @@
+.about {
+  &__container {
+    background-color: var(--color-background);
+    min-height: 100vh;
+  }
+
+  /* Hero Section */
+  &__hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                url('https://images.unsplash.com/photo-1594938291221-94f18cbb5660?w=1200&h=600&fit=crop') center/cover;
+    height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    position: relative;
+    /* Ensure proper alignment */
+    align-content: center;
+  }
+
+  &__hero-content {
+    max-width: 800px;
+    padding: var(--space-5);
+    /* Ensure proper alignment */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+
+  &__hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  &__hero-subtitle {
+    font-size: 1.5rem;
+    opacity: 0.9;
+    margin: 0;
+  }
+
+  /* Content Sections */
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    padding: var(--space-12) 0;
+    /* Ensure proper alignment */
+    align-items: center;
+  }
+
+  &__content-section {
+    margin-bottom: 2rem;
+  }
+
+  &__section-header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+    /* Ensure proper alignment */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  &__section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--color-foreground);
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  &__divider {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(to right, var(--color-accent), #a47148);
+    margin: 0 auto;
+    border-radius: 2px;
+  }
+
+  /* Story Section */
+  &__story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+    align-items: center;
+    /* Ensure proper alignment */
+    align-content: center;
+  }
+
+  &__story-text {
+    font-size: 1.1rem;
+    line-height: var(--leading-relaxed);
+    color: var(--color-foreground);
+    /* Ensure proper alignment */
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+
+    p {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  &__story-image {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+  }
+
+  /* Craftsmanship Section */
+  &__craftsmanship-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-5);
+    /* Ensure proper alignment */
+    align-items: stretch;
+  }
+
+  &__craft-card {
+    text-align: center;
+    padding: var(--space-6);
+    background: linear-gradient(135deg, var(--color-surface), var(--color-surface-2));
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    transition: var(--transition-default);
+    /* Ensure proper alignment */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--color-foreground);
+    }
+
+    p {
+      color: var(--color-muted);
+      line-height: 1.6;
+    }
+  }
+
+  &__craft-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--color-accent), #a47148);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    color: white;
+  }
+
+  /* Team Section */
+  &__team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-5);
+    /* Ensure proper alignment */
+    align-items: stretch;
+  }
+
+  &__team-member {
+    text-align: center;
+    padding: var(--space-4);
+    background: white;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    transition: var(--transition-default);
+    /* Ensure proper alignment */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-xl);
+    }
+  }
+
+  &__member-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 1.5rem;
+    border: 5px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+  }
+
+  &__member-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__member-title {
+    color: var(--color-accent);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Connect Section */
+  &__connect-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  &__connect-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--color-foreground);
+    margin-bottom: 2rem;
+  }
+
+  &__social-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    /* Ensure proper alignment */
+    align-items: center;
+  }
+
+  &__social-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, var(--color-accent), #a47148);
+    color: white;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition-default);
+    box-shadow: var(--shadow-md);
+    /* Ensure adequate touch targets */
+    min-height: 44px;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+  }
+
+  &__social-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    &__hero-section {
+      height: 400px;
+    }
+    
+    &__hero-title {
+      font-size: 2rem;
+    }
+    
+    &__hero-subtitle {
+      font-size: 1.2rem;
+    }
+    
+    &__section-title {
+      font-size: 2rem;
+    }
+    
+    &__story-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+    
+    &__story-image {
+      order: -1;
+    }
+    
+    &__social-links {
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    
+    &__social-link {
+      width: 100%;
+      max-width: 250px;
+      justify-content: center;
+    }
+    
+    &__content {
+      gap: var(--space-8);
+      padding: var(--space-8) 0;
+    }
+    
+    &__craftsmanship-grid {
+      gap: var(--space-4);
+    }
+    
+    &__team-grid {
+      gap: var(--space-4);
+    }
+    
+    &__craft-card {
+      padding: var(--space-4);
+    }
+    
+    &__team-member {
+      padding: var(--space-3);
+    }
+  }
+}

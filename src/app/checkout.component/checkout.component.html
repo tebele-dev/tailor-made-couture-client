@@ -1,0 +1,535 @@
+<div class="min-h-screen bg-background" role="main">
+  <div class="container mx-auto px-4 py-8">
+    <div class="max-w-6xl mx-auto">
+      <!-- Page Header -->
+      <div class="text-center mb-8 animate-fade-in-up">
+        <h1 class="page-title">Checkout</h1>
+        <p class="page-description">Complete your purchase</p>
+      </div>
+
+      <!-- Empty Cart Message -->
+      @if (cartItems.length === 0) {
+        <div class="card animate-fade-in">
+          <div class="card-content checkout__empty-cart">
+            <lucide-icon [name]="shoppingCartIcon" class="checkout__empty-cart-icon" aria-hidden="true"></lucide-icon>
+            <h2 class="checkout__empty-cart-title">Your cart is empty</h2>
+            <p class="checkout__empty-cart-description">Add items to your cart before checking out</p>
+            <a [routerLink]="['/products']" class="btn-primary" aria-label="Continue shopping">Continue Shopping</a>
+          </div>
+        </div>
+      } @else {
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Checkout Steps -->
+          <div class="lg:col-span-2">
+            <div class="card">
+              <div class="card-content">
+                <!-- Progress Steps -->
+                <div class="checkout__progress-steps mb-8" role="navigation" aria-label="Checkout steps">
+                  <div class="checkout__steps-container">
+                    <div class="checkout__step-item" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1">
+                      <div class="checkout__step-icon">
+                        <span>1</span>
+                      </div>
+                      <span class="checkout__step-label">Shipping</span>
+                    </div>
+                    <div class="checkout__step-item" [class.active]="currentStep >= 2" [class.completed]="currentStep > 2">
+                      <div class="checkout__step-icon">
+                        <span>2</span>
+                      </div>
+                      <span class="checkout__step-label">Payment</span>
+                    </div>
+                    <div class="checkout__step-item" [class.active]="currentStep >= 3" [class.completed]="currentStep > 3">
+                      <div class="checkout__step-icon">
+                        <span>3</span>
+                      </div>
+                      <span class="checkout__step-label">Review</span>
+                    </div>
+                    <div class="checkout__step-item" [class.active]="currentStep >= 4" [class.completed]="currentStep > 4">
+                      <div class="checkout__step-icon">
+                        <span>4</span>
+                      </div>
+                      <span class="checkout__step-label">Complete</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 1: Shipping Address -->
+                @if (currentStep === 1) {
+                  <div class="animate-fade-in">
+                    <h2 class="checkout__section-title">Shipping Address</h2>
+                    <p class="checkout__section-description">Select or add a shipping address</p>
+
+                    <div class="mt-6">
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        @for (address of addresses; track address.id) {
+                          <div 
+                            class="checkout__address-card" 
+                            [class.selected]="selectedAddress?.id === address.id"
+                            (click)="selectAddress(address)"
+                            role="button"
+                            tabindex="0"
+                            (keydown.enter)="selectAddress(address)"
+                            (keydown.space)="selectAddress(address)"
+                            aria-label="Select shipping address for {{ address.fullName }}"
+                          >
+                            <div class="flex items-start">
+                              <div class="checkout__radio-input-container">
+                                <input 
+                                  type="radio" 
+                                  [id]="'address-' + address.id" 
+                                  [checked]="selectedAddress?.id === address.id"
+                                  class="checkout__radio-input"
+                                  aria-label="Select {{ address.fullName }} as shipping address"
+                                >
+                              </div>
+                              <div class="ml-3">
+                                <div class="font-medium">{{ address.fullName }}</div>
+                                <div class="text-sm text-muted mt-1">
+                                  {{ address.street }}<br>
+                                  {{ address.city }}, {{ address.state }} {{ address.zipCode }}<br>
+                                  {{ address.country }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        }
+                      </div>
+
+                      <div class="border-t border-border pt-6">
+                        <h3 class="font-medium mb-4">Add New Address</h3>
+                        <form (ngSubmit)="addNewAddress()" #addressForm="ngForm" role="form" aria-label="Add new shipping address">
+                          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="checkout__form-group">
+                              <label for="fullName" class="checkout__form-label">Full Name</label>
+                              <input 
+                                type="text" 
+                                id="fullName" 
+                                [(ngModel)]="newAddress.fullName" 
+                                name="fullName" 
+                                class="checkout__form-input" 
+                                required
+                                aria-required="true"
+                              >
+                            </div>
+                            
+                            <div class="checkout__form-group">
+                              <label for="street" class="checkout__form-label">Street Address</label>
+                              <input 
+                                type="text" 
+                                id="street" 
+                                [(ngModel)]="newAddress.street" 
+                                name="street" 
+                                class="checkout__form-input" 
+                                required
+                                aria-required="true"
+                              >
+                            </div>
+                            
+                            <div class="checkout__form-group">
+                              <label for="city" class="checkout__form-label">City</label>
+                              <input 
+                                type="text" 
+                                id="city" 
+                                [(ngModel)]="newAddress.city" 
+                                name="city" 
+                                class="checkout__form-input" 
+                                required
+                                aria-required="true"
+                              >
+                            </div>
+                            
+                            <div class="checkout__form-group">
+                              <label for="state" class="checkout__form-label">State</label>
+                              <input 
+                                type="text" 
+                                id="state" 
+                                [(ngModel)]="newAddress.state" 
+                                name="state" 
+                                class="checkout__form-input" 
+                                required
+                                aria-required="true"
+                              >
+                            </div>
+                            
+                            <div class="checkout__form-group">
+                              <label for="zipCode" class="checkout__form-label">ZIP Code</label>
+                              <input 
+                                type="text" 
+                                id="zipCode" 
+                                [(ngModel)]="newAddress.zipCode" 
+                                name="zipCode" 
+                                class="checkout__form-input" 
+                                required
+                                aria-required="true"
+                              >
+                            </div>
+                            
+                            <div class="checkout__form-group">
+                              <label for="country" class="checkout__form-label">Country</label>
+                              <select 
+                                id="country" 
+                                [(ngModel)]="newAddress.country" 
+                                name="country" 
+                                class="checkout__form-input" 
+                                required
+                                aria-required="true"
+                              >
+                                <option value="United States">United States</option>
+                                <option value="Canada">Canada</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="Australia">Australia</option>
+                              </select>
+                            </div>
+                          </div>
+                          
+                          <div class="mt-6">
+                            <button 
+                              type="submit" 
+                              class="btn-primary" 
+                              [disabled]="!newAddress.fullName || !newAddress.street || !newAddress.city || !newAddress.state || !newAddress.zipCode"
+                              aria-label="Continue to payment method"
+                            >
+                              Continue to Payment
+                              <lucide-icon [name]="creditCardIcon" class="btn-icon" aria-hidden="true"></lucide-icon>
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                }
+
+                <!-- Step 2: Payment Method -->
+                @if (currentStep === 2) {
+                  <div class="animate-fade-in">
+                    <h2 class="checkout__section-title">Payment Method</h2>
+                    <p class="checkout__section-description">Select or add a payment method</p>
+
+                    <div class="mt-6">
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        @for (paymentMethod of paymentMethods; track paymentMethod.id) {
+                          <div 
+                            class="checkout__payment-card" 
+                            [class.selected]="selectedPaymentMethod?.id === paymentMethod.id"
+                            (click)="selectPaymentMethod(paymentMethod)"
+                            role="button"
+                            tabindex="0"
+                            (keydown.enter)="selectPaymentMethod(paymentMethod)"
+                            (keydown.space)="selectPaymentMethod(paymentMethod)"
+                            aria-label="Select payment method ending in {{ paymentMethod.cardNumber.slice(-4) }}"
+                          >
+                            <div class="flex items-start">
+                              <div class="checkout__radio-input-container">
+                                <input 
+                                  type="radio" 
+                                  [id]="'payment-' + paymentMethod.id" 
+                                  [checked]="selectedPaymentMethod?.id === paymentMethod.id"
+                                  class="checkout__radio-input"
+                                  aria-label="Select payment method ending in {{ paymentMethod.cardNumber.slice(-4) }}"
+                                >
+                              </div>
+                              <div class="ml-3">
+                                <div class="font-medium">{{ paymentMethod.nameOnCard }}</div>
+                                <div class="text-sm text-muted mt-1">
+                                  {{ paymentMethod.cardNumber }}<br>
+                                  Expires {{ paymentMethod.expiryMonth }}/{{ paymentMethod.expiryYear }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        }
+                      </div>
+
+                      <div class="border-t border-border pt-6">
+                        <h3 class="font-medium mb-4">Add New Payment Method</h3>
+                        <form (ngSubmit)="addNewPaymentMethod()" #paymentForm="ngForm" role="form" aria-label="Add new payment method">
+                          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="checkout__form-group md:col-span-2">
+                              <label for="nameOnCard" class="checkout__form-label">Name on Card</label>
+                              <input 
+                                type="text" 
+                                id="nameOnCard" 
+                                [(ngModel)]="newPaymentMethod.nameOnCard" 
+                                name="nameOnCard" 
+                                class="checkout__form-input" 
+                                required
+                                aria-required="true"
+                              >
+                            </div>
+                            
+                            <div class="checkout__form-group md:col-span-2">
+                              <label for="cardNumber" class="checkout__form-label">Card Number</label>
+                              <input 
+                                type="text" 
+                                id="cardNumber" 
+                                [(ngModel)]="newPaymentMethod.cardNumber" 
+                                name="cardNumber" 
+                                class="checkout__form-input" 
+                                placeholder="1234 5678 9012 3456"
+                                required
+                                aria-required="true"
+                              >
+                            </div>
+                            
+                            <div class="checkout__form-group">
+                              <label for="expiryMonth" class="checkout__form-label">Expiry Month</label>
+                              <select 
+                                id="expiryMonth" 
+                                [(ngModel)]="newPaymentMethod.expiryMonth" 
+                                name="expiryMonth" 
+                                class="checkout__form-input" 
+                                required
+                                aria-required="true"
+                              >
+                                <option value="">Select Month</option>
+                                @for (month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track month) {
+                                  <option [value]="month">{{ month < 10 ? '0' + month : month }}</option>
+                                }
+                              </select>
+                            </div>
+                            
+                            <div class="checkout__form-group">
+                              <label for="expiryYear" class="checkout__form-label">Expiry Year</label>
+                              <select 
+                                id="expiryYear" 
+                                [(ngModel)]="newPaymentMethod.expiryYear" 
+                                name="expiryYear" 
+                                class="checkout__form-input" 
+                                required
+                                aria-required="true"
+                              >
+                                <option value="">Select Year</option>
+                                @for (year of [2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034]; track year) {
+                                  <option [value]="year">{{ year }}</option>
+                                }
+                              </select>
+                            </div>
+                            
+                            <div class="checkout__form-group">
+                              <label for="cvv" class="checkout__form-label">CVV</label>
+                              <input 
+                                type="text" 
+                                id="cvv" 
+                                [(ngModel)]="newPaymentMethod.cvv" 
+                                name="cvv" 
+                                class="checkout__form-input" 
+                                placeholder="123"
+                                required
+                                aria-required="true"
+                              >
+                            </div>
+                          </div>
+                          
+                          <div class="mt-6">
+                            <button 
+                              type="submit" 
+                              class="btn-primary" 
+                              [disabled]="!newPaymentMethod.nameOnCard || !newPaymentMethod.cardNumber || !newPaymentMethod.expiryMonth || !newPaymentMethod.expiryYear || !newPaymentMethod.cvv"
+                              aria-label="Continue to order review"
+                            >
+                              Continue to Review
+                              <lucide-icon [name]="checkIcon" class="btn-icon" aria-hidden="true"></lucide-icon>
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                }
+
+                <!-- Step 3: Order Review -->
+                @if (currentStep === 3) {
+                  <div class="animate-fade-in">
+                    <h2 class="checkout__section-title">Review Your Order</h2>
+                    <p class="checkout__section-description">Please review your order details before placing</p>
+
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <!-- Order Summary -->
+                      <div>
+                        <h3 class="font-medium mb-4">Order Summary</h3>
+                        <div class="card">
+                          <div class="card-content">
+                            <div class="space-y-4">
+                              @for (item of cartItems; track item.product.id) {
+                                <div class="flex items-center">
+                                  <img 
+                                    [src]="item.product.image" 
+                                    [alt]="item.product.name" 
+                                    class="w-16 h-16 object-cover rounded-md border border-border"
+                                    loading="lazy"
+                                  >
+                                  <div class="ml-4 flex-1">
+                                    <div class="font-medium">{{ item.product.name }}</div>
+                                    <div class="text-sm text-muted">Qty: {{ item.quantity }}</div>
+                                  </div>
+                                  <div class="font-medium">{{ (item.product.price * item.quantity) | currency }}</div>
+                                </div>
+                              }
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Order Details -->
+                      <div>
+                        <h3 class="font-medium mb-4">Order Details</h3>
+                        <div class="card">
+                          <div class="card-content">
+                            <div class="space-y-4">
+                              <div>
+                                <h4 class="font-medium mb-2">Shipping Address</h4>
+                                @if (selectedAddress) {
+                                  <div class="text-sm">
+                                    <div>{{ selectedAddress.fullName }}</div>
+                                    <div>{{ selectedAddress.street }}</div>
+                                    <div>{{ selectedAddress.city }}, {{ selectedAddress.state }} {{ selectedAddress.zipCode }}</div>
+                                    <div>{{ selectedAddress.country }}</div>
+                                  </div>
+                                }
+                              </div>
+
+                              <div class="border-t border-border pt-4">
+                                <h4 class="font-medium mb-2">Payment Method</h4>
+                                @if (selectedPaymentMethod) {
+                                  <div class="text-sm">
+                                    <div>{{ selectedPaymentMethod.nameOnCard }}</div>
+                                    <div>{{ selectedPaymentMethod.cardNumber }}</div>
+                                    <div>Expires {{ selectedPaymentMethod.expiryMonth }}/{{ selectedPaymentMethod.expiryYear }}</div>
+                                  </div>
+                                }
+                              </div>
+
+                              <div class="border-t border-border pt-4">
+                                <h4 class="font-medium mb-2">Order Total</h4>
+                                <div class="space-y-2">
+                                  <div class="flex justify-between text-sm">
+                                    <span>Subtotal</span>
+                                    <span>{{ getCartSubtotal() | currency }}</span>
+                                  </div>
+                                  <div class="flex justify-between text-sm">
+                                    <span>Shipping</span>
+                                    <span>{{ getShippingCost() | currency }}</span>
+                                  </div>
+                                  <div class="flex justify-between text-sm">
+                                    <span>Tax</span>
+                                    <span>{{ getTaxAmount() | currency }}</span>
+                                  </div>
+                                  <div class="flex justify-between font-medium pt-2 border-t border-border">
+                                    <span>Total</span>
+                                    <span>{{ getOrderTotal() | currency }}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                      <button type="button" class="btn-outline" (click)="prevStep()" aria-label="Back to payment method">
+                        Back to Payment
+                      </button>
+                      <button type="button" class="btn-primary" (click)="placeOrder()" aria-label="Place order">
+                        Place Order
+                      </button>
+                    </div>
+                  </div>
+                }
+
+                <!-- Step 4: Order Confirmation -->
+                @if (currentStep === 4) {
+                  <div class="animate-fade-in text-center">
+                    <div class="mx-auto w-16 h-16 bg-accent rounded-full flex items-center justify-center mb-6">
+                      <lucide-icon [name]="checkIcon" class="w-8 h-8 text-accent-foreground" aria-hidden="true"></lucide-icon>
+                    </div>
+                    
+                    <h2 class="checkout__section-title">Order Placed Successfully!</h2>
+                    <p class="checkout__section-description mb-6">
+                      Thank you for your order. A confirmation email has been sent to {{ user?.email }}.
+                    </p>
+                    
+                    <div class="card max-w-md mx-auto mb-8">
+                      <div class="card-content">
+                        <div class="text-left space-y-3">
+                          <div class="flex justify-between">
+                            <span class="text-muted">Order Number:</span>
+                            <span class="font-medium">{{ orderNumber }}</span>
+                          </div>
+                          <div class="flex justify-between">
+                            <span class="text-muted">Order Date:</span>
+                            <span class="font-medium">{{ orderDate | date:'medium' }}</span>
+                          </div>
+                          <div class="flex justify-between">
+                            <span class="text-muted">Total:</span>
+                            <span class="font-medium">{{ getOrderTotal() | currency }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                      <a [routerLink]="['/home']" class="btn-primary" aria-label="Continue shopping">
+                        Continue Shopping
+                      </a>
+                      <a [routerLink]="['/products']" class="btn-outline" aria-label="View products">
+                        View Products
+                      </a>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Summary Sidebar -->
+          <div class="lg:col-span-1">
+            <div class="card sticky top-8">
+              <div class="card-header">
+                <h2 class="card-title">Order Summary</h2>
+              </div>
+              <div class="card-content">
+                <div class="space-y-4">
+                  @for (item of cartItems; track item.product.id) {
+                    <div class="flex items-center">
+                      <img 
+                        [src]="item.product.image" 
+                        [alt]="item.product.name" 
+                        class="w-12 h-12 object-cover rounded-md border border-border"
+                        loading="lazy"
+                      >
+                      <div class="ml-3 flex-1">
+                        <div class="text-sm font-medium">{{ item.product.name }}</div>
+                        <div class="text-xs text-muted">Qty: {{ item.quantity }}</div>
+                      </div>
+                      <div class="text-sm font-medium">{{ (item.product.price * item.quantity) | currency }}</div>
+                    </div>
+                  }
+                  
+                  <div class="border-t border-border pt-4 space-y-2">
+                    <div class="flex justify-between text-sm">
+                      <span>Subtotal</span>
+                      <span>{{ getCartSubtotal() | currency }}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                      <span>Shipping</span>
+                      <span>{{ getShippingCost() | currency }}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                      <span>Tax</span>
+                      <span>{{ getTaxAmount() | currency }}</span>
+                    </div>
+                    <div class="flex justify-between font-medium pt-2 border-t border-border">
+                      <span>Total</span>
+                      <span>{{ getOrderTotal() | currency }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

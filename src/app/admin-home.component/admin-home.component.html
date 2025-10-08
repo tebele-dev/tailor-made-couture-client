@@ -1,0 +1,116 @@
+<div class="admin-dashboard">
+  <div class="container mx-auto px-4 py-8">
+    <div class="admin-header">
+      <h1 class="page-title">Admin Dashboard</h1>
+      <p class="page-description">Manage your store and custom design configurations</p>
+    </div>
+
+    <!-- Dashboard Stats -->
+    <div class="dashboard-stats">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <lucide-icon [name]="packageIcon" class="icon"></lucide-icon>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">24</div>
+          <div class="stat-label">Products</div>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">
+          <lucide-icon [name]="usersIcon" class="icon"></lucide-icon>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">142</div>
+          <div class="stat-label">Customers</div>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">
+          <lucide-icon [name]="clipboardIcon" class="icon"></lucide-icon>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">8</div>
+          <div class="stat-label">Orders</div>
+        </div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">
+          <lucide-icon [name]="settingsIcon" class="icon"></lucide-icon>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">12</div>
+          <div class="stat-label">Designs</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <h2>Quick Actions</h2>
+      <div class="actions-grid">
+        <a [routerLink]="['/inventory']" class="action-card">
+          <lucide-icon [name]="packageIcon" class="action-icon"></lucide-icon>
+          <span>Manage Inventory</span>
+        </a>
+        
+        <a [routerLink]="['/admin-design']" class="action-card">
+          <lucide-icon [name]="settingsIcon" class="action-icon"></lucide-icon>
+          <span>Design Config</span>
+        </a>
+        
+        <a [routerLink]="['/fabric']" class="action-card">
+          <lucide-icon [name]="shirtIcon" class="action-icon"></lucide-icon>
+          <span>Fabric Manager</span>
+        </a>
+        
+        <a [routerLink]="['/admin-design']" class="action-card">
+          <lucide-icon [name]="barChartIcon" class="action-icon"></lucide-icon>
+          <span>View Reports</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="recent-activity">
+      <h2>Recent Activity</h2>
+      <div class="activity-list">
+        <div class="activity-item">
+          <div class="activity-icon">
+            <lucide-icon [name]="userPlusIcon" class="icon"></lucide-icon>
+          </div>
+          <div class="activity-content">
+            <div class="activity-title">New customer registered</div>
+            <div class="activity-description">John Doe joined the platform</div>
+            <div class="activity-time">2 hours ago</div>
+          </div>
+        </div>
+        
+        <div class="activity-item">
+          <div class="activity-icon">
+            <lucide-icon [name]="shoppingCartIcon" class="icon"></lucide-icon>
+          </div>
+          <div class="activity-content">
+            <div class="activity-title">New order placed</div>
+            <div class="activity-description">Order #ORD-2025-00123 for $299.99</div>
+            <div class="activity-time">4 hours ago</div>
+          </div>
+        </div>
+        
+        <div class="activity-item">
+          <div class="activity-icon">
+            <lucide-icon [name]="packageIcon" class="icon"></lucide-icon>
+          </div>
+          <div class="activity-content">
+            <div class="activity-title">Product updated</div>
+            <div class="activity-description">Premium Navy Suit stock updated</div>
+            <div class="activity-time">1 day ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
